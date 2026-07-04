@@ -71,9 +71,7 @@ jobs:
         run: |
           dotnet nuget add source $env:NUGET_HOST -n private -u $env:NUGET_USERNAME -p $env:NUGET_PASSWORD --store-password-in-clear-text;
 
-          echo $env:APP_NAME;
-
-          dotnet build -c Release .\$env:APP_NAME.sln;
+          dotnet build .\$env:APP_NAME.sln -c Release;
           if ($LastExitCode -ne 0)
           { 
               throw "error";
