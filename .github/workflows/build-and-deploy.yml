@@ -11,8 +11,8 @@ env:
   IMAGE_NAME: svc.accounts
   SERVICE_NAME: svc-accounts
   VERSION: '${{ vars.VERSION }}.${{ github.run_number }}.${{ github.run_attempt }}'
-  DOTNET_SDK_VERSION: 10.0
-  DOTNET_ASPNET_VERSION: 10.0
+  DOTNET_SDK_VERSION: "10.0"
+  DOTNET_ASPNET_VERSION: "10.0"
   AZURE_GROUP_KUBERNETES: ${{ vars.AZURE_RESOURCE_GROUP_KUBERNETES }}
   AZURE_GROUP_BACKUP: ${{ vars.AZURE_BACKUP_RESOURCE_GROUP }}
   AZURE_GROUP_STORAGE: ${{ vars.AZURE_STORAGE_RESOURCE_GROUP }}
@@ -114,12 +114,15 @@ jobs:
         run: |
           $env:CONTAINER_REGISTRY_HOST = az acr list -g $env:AZURE_GROUP_DELIVERY --query [0].loginServer -o tsv;
 
+          echo $env:DOTNET_SDK_VERSION; 
+          echo $env:DOTNET_ASPNET_VERSION;
+
           az acr build `
               --registry $env:CONTAINER_REGISTRY_HOST `
               -t "$($env:IMAGE_NAME):latest" `
               -t "$($env:IMAGE_NAME):$($env:VERSION)" `
-              --build-arg "DOTNET_SDK_VERSION=$env:DOTNET_SDK_VERSION" `
-              --build-arg "DOTNET_ASPNET_VERSION=$env:DOTNET_ASPNET_VERSION" `
+              --build-arg DOTNET_SDK_VERSION=$env:DOTNET_SDK_VERSION `
+              --build-arg DOTNET_ASPNET_VERSION=$env:DOTNET_ASPNET_VERSION `
               --build-arg CONTAINER_REGISTRY_SOURCE_LABEL=https://github.com/$env:GITHUB_REPOSITORY `
               --build-arg NUGET_HOST=$env:NUGET_HOST `
               --build-arg NUGET_USERNAME=$env:NUGET_USERNAME `
