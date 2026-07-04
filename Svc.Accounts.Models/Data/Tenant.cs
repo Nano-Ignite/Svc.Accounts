@@ -1,0 +1,32 @@
+﻿using Nano.Data.Abstractions.Models;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using Z.EntityFramework.Plus;
+
+namespace Svc.Accounts.Models.Data;
+
+/// <summary>
+/// Tenant.
+/// </summary>
+public class Tenant : BaseEntity
+{
+    /// <summary>
+    /// Name.
+    /// </summary>
+    [Required]
+    [MaxLength(256)]
+    public virtual string Name { get; internal set; } = null!;
+
+    /// <summary>
+    /// Name Normalized.
+    /// </summary>
+    [Required]
+    [MaxLength(128)]
+    [AuditExclude]
+    public virtual string NameNormalized { get; internal set; } = null!;
+
+    /// <summary>
+    /// Users.
+    /// </summary>
+    public virtual IEnumerable<User> Users { get; set; } = new List<User>();
+}
