@@ -118,8 +118,8 @@ jobs:
               --registry $env:CONTAINER_REGISTRY_HOST `
               -t "$($env:IMAGE_NAME):latest" `
               -t "$($env:IMAGE_NAME):$($env:VERSION)" `
-              --build-arg DOTNET_SDK_VERSION=$env:DOTNET_SDK_VERSION `
-              --build-arg DOTNET_ASPNET_VERSION=$env:DOTNET_ASPNET_VERSION `
+              --build-arg "DOTNET_SDK_VERSION=$env:DOTNET_SDK_VERSION" `
+              --build-arg "DOTNET_ASPNET_VERSION=$env:DOTNET_ASPNET_VERSION" `
               --build-arg CONTAINER_REGISTRY_SOURCE_LABEL=https://github.com/$env:GITHUB_REPOSITORY `
               --build-arg NUGET_HOST=$env:NUGET_HOST `
               --build-arg NUGET_USERNAME=$env:NUGET_USERNAME `
