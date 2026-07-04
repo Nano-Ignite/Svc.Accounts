@@ -21,11 +21,6 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", ".docker\d
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{426FE279-89DF-4C2A-ABBB-729FDA4D893A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{5C605BF3-D5A3-4334-8AFA-4D45A6DC365E}"
-	ProjectSection(SolutionItems) = preProject
-		.github\config\slack.yml = .github\config\slack.yml
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{F547FB13-43D4-4AAB-8629-B41FFF4A251F}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\build-and-deploy.yml = .github\workflows\build-and-deploy.yml
@@ -64,7 +59,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{557A0C48-DA6A-4D7C-8668-94F08A390F4B} = {06253892-53F5-4EB1-8CBE-8558DBDD9B70}
-		{5C605BF3-D5A3-4334-8AFA-4D45A6DC365E} = {426FE279-89DF-4C2A-ABBB-729FDA4D893A}
 		{F547FB13-43D4-4AAB-8629-B41FFF4A251F} = {426FE279-89DF-4C2A-ABBB-729FDA4D893A}
 		{B008D867-12B4-7EB7-D707-1C1503E4151A} = {7E0D2A84-F3DE-4406-BE71-30EE6723E6D0}
 	EndGlobalSection

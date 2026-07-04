@@ -57,6 +57,8 @@ jobs:
       contents: write
       packages: write
     steps:
+      - uses: actions/checkout@v4
+
       - name: Azure Login
         shell: pwsh
         run: |
@@ -275,12 +277,3 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: false
           prerelease: false
-
-      - name: Slack Notification
-        if: always()
-        uses: act10ns/slack@v2
-        with:
-          webhook-url: ${{ secrets.SLACK_WEBHOOK }}
-          config: .github/config/slack.yml
-          status: ${{ job.status }}
-          channel: ${{ vars.SLACK_CHANNEL }}
