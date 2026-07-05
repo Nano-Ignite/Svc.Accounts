@@ -60,12 +60,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Debug user
-        shell: pwsh
-        run: |
-          whoami
-          echo $env:HOME
-
       - name: Azure Login
         shell: pwsh
         run: |
