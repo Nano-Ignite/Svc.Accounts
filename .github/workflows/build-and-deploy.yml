@@ -64,18 +64,13 @@ jobs:
       - name: Azure Login
         shell: pwsh
         run: |
+          echo "Password length: $($env:SQL_ADMIN_PASSWORD.Length)";
+ 
           az login --service-principal -u $env:AZURE_CLIENT_ID -p $env:AZURE_CLIENT_SECRET --tenant $env:AZURE_TENANT_ID -o none;
           az account set -s $env:AZURE_SUBSCRIPTION_ID -o none;
 
           $env:KUBERNETES_CLUSTER = az aks list -g $env:AZURE_GROUP_KUBERNETES --query [0].name -o tsv;
           az aks get-credentials -g $env:AZURE_GROUP_KUBERNETES -n $env:KUBERNETES_CLUSTER --overwrite -o none;
-
-          $env:SQL_HOST = az mysql flexible-server list -g $env:AZURE_GROUP_DATABASE --query [0].fullyQualifiedDomainName -o tsv;
-          $env:SQL_PORT = az mysql flexible-server list -g $env:AZURE_GROUP_DATABASE --query [0].databasePort -o tsv;
-          $env:SQL_ADMIN_USER = az mysql flexible-server list -g $env:AZURE_GROUP_DATABASE --query [0].administratorLogin -o tsv;
-
-          mysql -h $env:SQL_HOST -P $env:SQL_PORT -u $env:SQL_ADMIN_USER -p$env:SQL_ADMIN_PASSWORD -e "SELECT 1;";
-          Test-NetConnection -ComputerName $env:SQL_HOST -Port $env:SQL_PORT;
 
       - name: Build Solution
         shell: pwsh
