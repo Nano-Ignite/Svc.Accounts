@@ -134,12 +134,13 @@ jobs:
           $env:SQL_ADMIN_USER = az mysql flexible-server list -g $env:AZURE_GROUP_DATABASE --query [0].administratorLogin -o tsv;
           $env:SQL_MIGRATION_CONNECTIONSTRING = "Server=$env:SQL_HOST;Port=$env:SQL_PORT;Database=$env:SQL_NAME;Uid=$env:SQL_ADMIN_USER;Pwd=$env:SQL_ADMIN_PASSWORD;SslMode=Preferred";
 
+          echo $env:SQL_MIGRATION_CONNECTIONSTRING;
+
           #mysql -h $env:SQL_HOST -P $env:SQL_PORT -u $env:SQL_ADMIN_USER --password="$env:SQL_ADMIN_PASSWORD" -e "SELECT 1;";
 
-          #echo "PW: [$env:SQL_ADMIN_PASSWORD]";
-            #--no-build `
 
           & "/opt/ef-tools/$env:DOTNET_EF_TOOLS_VERSION/dotnet-ef" database update `
+            --no-build `
             --startup-project $env:APP_NAME `
             --connection "$env:SQL_MIGRATION_CONNECTIONSTRING ";
 
