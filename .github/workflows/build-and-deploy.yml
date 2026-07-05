@@ -185,8 +185,8 @@ jobs:
               --storage-account $env:STORAGE_ACCOUNT_NAME `
               --query exists;
 
-          # if ($env:FILE_SHARE_EXISTS -eq "false")
-          # { 
+          if ($env:FILE_SHARE_EXISTS -eq "false")
+          { 
           #     az storage share-rm create `
           #         -g $env:AZURE_GROUP_STORAGE `
           #         -n $env:STORAGE_SHARE_NAME `
@@ -212,7 +212,7 @@ jobs:
           #     { 
           #         throw "error";
           #     };
-          # }
+          }
 
       # - name: Kubernetes Deploy
       #   shell: pwsh
