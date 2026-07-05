@@ -60,6 +60,12 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Debug user
+        shell: pwsh
+        run: |
+          whoami
+          echo $env:HOME
+
       - name: Azure Login
         shell: pwsh
         run: |
@@ -69,7 +75,7 @@ jobs:
           $env:KUBERNETES_CLUSTER = az aks list -g $env:AZURE_GROUP_KUBERNETES --query [0].name -o tsv;
           az aks get-credentials -g $env:AZURE_GROUP_KUBERNETES -n $env:KUBERNETES_CLUSTER --overwrite -o none;
 
-      - name: Build
+      - name: Build Solution
         shell: pwsh
         run: |
           dotnet nuget add source $env:NUGET_HOST -n private -u $env:NUGET_USERNAME -p $env:NUGET_PASSWORD --store-password-in-clear-text;
@@ -81,7 +87,7 @@ jobs:
               throw "error";
           };
 
-      - name: Test
+      - name: Test Solution
         shell: pwsh
         run: |
           dotnet test .\.tests\Tests.$env:APP_NAME\Tests.$env:APP_NAME.csproj;
@@ -103,7 +109,7 @@ jobs:
               throw "error";
           };  
 
-      - name: Build and Push Image
+      - name: Build & Push Image
         shell: pwsh
         run: |
           $env:CONTAINER_REGISTRY_HOST = az acr list -g $env:AZURE_GROUP_DELIVERY --query [0].loginServer -o tsv;
