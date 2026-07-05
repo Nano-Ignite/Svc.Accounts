@@ -18,7 +18,7 @@ env:
   AZURE_GROUP_DELIVERY: ${{ vars.AZURE_RESOURCE_GROUP_DELIVERY }}
   AZURE_GROUP_DATABASE : ${{ vars.AZURE_RESOURCE_GROUP_DATABASE }}
   AZURE_GROUP_STORAGE: ${{ vars.AZURE_RESOURCE_GROUP_STORAGE }}
-  AZURE_GROUP_BACKUP: ${{ vars.AZURE_BACKUP_RESOURCE_GROUP }}
+  AZURE_GROUP_BACKUP: ${{ vars.AZURE_RESOURCE_GROUP_BACKUP }}
   AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
   AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
@@ -187,11 +187,6 @@ jobs:
 
           if ($env:FILE_SHARE_EXISTS -eq "false")
           { 
-              echo $env:AZURE_GROUP_STORAGE;
-              echo $env:STORAGE_SHARE_NAME;
-              echo $env:STORAGE_ACCOUNT_NAME;
-              echo $env:STORAGE_SIZE;
-
               az storage share-rm create `
                   -g $env:AZURE_GROUP_STORAGE `
                   -n $env:STORAGE_SHARE_NAME `
