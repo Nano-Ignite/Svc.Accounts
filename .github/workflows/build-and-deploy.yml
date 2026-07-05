@@ -147,11 +147,12 @@ jobs:
               throw "error";
           };
           
+          $env:MYSQL_PWD = $env:SQL_ADMIN_PASSWORD
+
           $userExists = mysql `
               --host $env:SQL_HOST `
               --port $env:SQL_PORT `
               --user $env:SQL_ADMIN_USER `
-              --password="$env:SQL_ADMIN_PASSWORD" `
               --ssl-mode=REQUIRED `
               -e "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = '$env:SQL_USER');";
 
@@ -161,7 +162,6 @@ jobs:
                  --host $env:SQL_HOST `
                  --port $env:SQL_PORT `
                  --user $env:SQL_ADMIN_USER `
-                 --password="$env:SQL_ADMIN_PASSWORD" `
                  --ssl-mode=REQUIRED `
                  -e "CREATE USER '$env:SQL_USER'@'%' IDENTIFIED BY '$env:SQL_PASSWORD'; GRANT SELECT, INSERT, UPDATE, DELETE ON $env:SQL_NAME.* TO '$env:SQL_USER'@'%'; FLUSH PRIVILEGES;";
 
