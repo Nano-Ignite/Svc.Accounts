@@ -138,8 +138,10 @@ jobs:
 
           & "/opt/ef-tools/$env:DOTNET_EF_TOOLS_VERSION/dotnet-ef" database update `
             --no-build `
+            --configuration Release `
             --startup-project $env:APP_NAME `
-            -- --environment $env:ASPNETCORE_ENVIRONMENT;
+            -- `
+            --environment $env:ASPNETCORE_ENVIRONMENT;
             #--connection "$env:SQL_MIGRATION_CONNECTIONSTRING";
 
           if ($LastExitCode -ne 0)
