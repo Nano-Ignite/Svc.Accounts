@@ -13,6 +13,7 @@ env:
   VERSION: '${{ vars.VERSION }}.${{ github.run_number }}.${{ github.run_attempt }}'
   DOTNET_SDK_VERSION: "10.0"
   DOTNET_ASPNET_VERSION: "10.0"
+  DOTNET_EF_TOOLS_VERSION: "net10"
   AZURE_GROUP_KUBERNETES: ${{ vars.AZURE_RESOURCE_GROUP_KUBERNETES }}
   AZURE_GROUP_DELIVERY: ${{ vars.AZURE_RESOURCE_GROUP_DELIVERY }}
   AZURE_GROUP_DATABASE : ${{ vars.AZURE_RESOURCE_GROUP_DATABASE }}
@@ -108,9 +109,6 @@ jobs:
         run: |
           $env:CONTAINER_REGISTRY_HOST = az acr list -g $env:AZURE_GROUP_DELIVERY --query [0].loginServer -o tsv;
 
-          echo $env:DOTNET_SDK_VERSION; 
-          echo $env:DOTNET_ASPNET_VERSION;
-
           az acr build `
               --registry $env:CONTAINER_REGISTRY_HOST `
               -t "$($env:IMAGE_NAME):latest" `
@@ -136,7 +134,7 @@ jobs:
           $env:SQL_ADMIN_USER = az mysql flexible-server list -g $env:AZURE_GROUP_DATABASE --query [0].administratorLogin -o tsv;
           $env:SQL_MIGRATION_CONNECTIONSTRING = "Server=$env:SQL_HOST;Port=$env:SQL_PORT;Database=$env:SQL_NAME;Uid=$env:SQL_ADMIN_USER;Pwd=$env:SQL_ADMIN_PASSWORD;SslMode=Preferred";
 
-          dotnet ef database update `
+          & /opt/ef-tools/net10/dotnet-ef database update `
             --no-build `
             --startup-project $env:APP_NAME `
             --connection "$env:SQL_MIGRATION_CONNECTIONSTRING ";
