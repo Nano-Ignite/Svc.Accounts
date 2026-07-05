@@ -213,8 +213,21 @@ jobs:
                   throw "error";
               };
           }
+          else
+          {
+              az storage share-rm update `
+                  -g $env:AZURE_GROUP_STORAGE `
+                  -n $env:STORAGE_SHARE_NAME `
+                  --storage-account $env:STORAGE_ACCOUNT_NAME `
+                  --access-tier TransactionOptimized `
+                  --quota $env:STORAGE_SIZE;
+              
+              if ($LastExitCode -ne 0) 
+              { 
+                  throw "error";
+              };
+          }
 
-                    # WE SHOULD SUPPORT UPDATE HERE IF SIZE CHANGES
 
       # - name: Kubernetes Deploy
       #   shell: pwsh
