@@ -193,25 +193,6 @@ jobs:
                   --storage-account $env:STORAGE_ACCOUNT_NAME `
                   --access-tier TransactionOptimized `
                   --quota $env:STORAGE_SIZE;
-              
-              if ($LastExitCode -ne 0) 
-              { 
-                  throw "error";
-              };
-
-              $env:BACKUP_VAULT_NAME = az backup vault list -g $env:AZURE_GROUP_BACKUP --query [0].name -o tsv;
-
-              az backup protection enable-for-azurefileshare `
-                  -g $env:AZURE_GROUP_BACKUP `
-                  -v $env:BACKUP_VAULT_NAME `
-                  -p $env:STORAGE_ACCOUNT_NAME-backup-policy `
-                  --storage-account $env:STORAGE_ACCOUNT_NAME `
-                  --azure-file-share $env:STORAGE_SHARE_NAME;
-              
-              if ($LastExitCode -ne 0) 
-              { 
-                  throw "error";
-              };
           }
           else
           {
@@ -221,12 +202,31 @@ jobs:
                   --storage-account $env:STORAGE_ACCOUNT_NAME `
                   --access-tier TransactionOptimized `
                   --quota $env:STORAGE_SIZE;
-              
-              if ($LastExitCode -ne 0) 
-              { 
-                  throw "error";
-              };
           }
+
+          if ($LastExitCode -ne 0) 
+          { 
+              throw "error";
+          };
+
+          $env:BACKUP_VAULT_NAME = az backup vault list -g $env:AZURE_GROUP_BACKUP --query [0].name -o tsv;
+
+          echo $env:AZURE_GROUP_BACKUP;
+          echo $env:BACKUP_VAULT_NAME;
+          echo $env:STORAGE_ACCOUNT_NAME;
+          echo $env:STORAGE_SHARE_NAME;
+
+          az backup protection enable-for-azurefileshare `
+              -g $env:AZURE_GROUP_BACKUP `
+              -v $env:BACKUP_VAULT_NAME `
+              -p $env:STORAGE_ACCOUNT_NAME-backup-policy `
+              --storage-account $env:STORAGE_ACCOUNT_NAME `
+              --azure-file-share $env:STORAGE_SHARE_NAME;
+              
+          if ($LastExitCode -ne 0) 
+          { 
+              throw "error";
+          };
 
 
       # - name: Kubernetes Deploy
