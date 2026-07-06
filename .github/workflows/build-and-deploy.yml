@@ -44,7 +44,7 @@ env:
   AUTH_JWT_PUBLIC_KEY: ${{ github.ref == 'refs/heads/main' && secrets.PRODUCTION_AUTH_JWT_PUBLIC_KEY || secrets.STAGING_AUTH_JWT_PUBLIC_KEY }}
   AUTH_JWT_PRIVATE_KEY: ${{ github.ref == 'refs/heads/main' && secrets.PRODUCTION_AUTH_JWT_PRIVATE_KEY || secrets.STAGING_AUTH_JWT_PRIVATE_KEY }}
   STORAGE_SIZE: 25
-  STORAGE_SHARE_NAME: svc-accounts
+  STORAGE_SHARE_NAME: svc-accounts2
   ASPNETCORE_ENVIRONMENT: ${{ github.ref == 'refs/heads/main' && 'Production' || 'Staging' }}
 concurrency:
   group: ${{ github.workflow }}-${{ github.repository }}
@@ -198,6 +198,8 @@ jobs:
               { 
                   throw "error";
               };
+
+              sleep 300;
 
               $env:BACKUP_VAULT_NAME = az backup vault list -g $env:AZURE_GROUP_BACKUP --query [0].name -o tsv;
 
