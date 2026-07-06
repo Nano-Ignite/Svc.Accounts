@@ -48,12 +48,21 @@ spec:
             secretKeyRef:
               name: rabbitmq-auth
               key: username
-           envFrom:
         - name: Eventing__Credentials__Secret
           valueFrom:
             secretKeyRef:
               name: rabbitmq-auth
               key: password
+        - name: App__Authentication__Jwt__PublicKey
+          valueFrom:
+            secretKeyRef:
+              name: auth-jwt-secret
+              key: jwt-public-key
+        - name: App__Authentication__Jwt__PrivateKey
+          valueFrom:
+            secretKeyRef:
+              name: auth-jwt-secret
+              key: jwt-private-key
         envFrom:
         - configMapRef:
             name: %SERVICE_NAME%-config
