@@ -219,10 +219,10 @@ jobs:
           az backup protection enable-for-azurefileshare `
               -g $env:AZURE_GROUP_BACKUP `
               -v $env:BACKUP_VAULT_NAME `
-              -p $env:STORAGE_ACCOUNT_NAME-backup-policy `
+              -p $env:STORAGE_ACCOUNT_NAME-fileshare-backup-policy `
               --storage-account $env:STORAGE_ACCOUNT_NAME `
               --azure-file-share $env:STORAGE_SHARE_NAME;
-              
+
           if ($LastExitCode -ne 0) 
           { 
               throw "error";
