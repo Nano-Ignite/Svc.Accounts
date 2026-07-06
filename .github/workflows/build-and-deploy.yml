@@ -199,8 +199,6 @@ jobs:
                   throw "error";
               };
 
-              sleep 300;
-
               $env:BACKUP_VAULT_NAME = az backup vault list -g $env:AZURE_GROUP_BACKUP --query [0].name -o tsv;
 
               az backup protection enable-for-azurefileshare `
