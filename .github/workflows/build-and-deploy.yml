@@ -70,17 +70,17 @@ jobs:
           $env:KUBERNETES_CLUSTER = az aks list -g $env:AZURE_GROUP_KUBERNETES --query [0].name -o tsv;
           az aks get-credentials -g $env:AZURE_GROUP_KUBERNETES -n $env:KUBERNETES_CLUSTER --overwrite -o none;
 
-      # - name: Build Solution
-      #   shell: pwsh
-      #   run: |
-      #     dotnet nuget add source $env:NUGET_HOST -n private -u $env:NUGET_USERNAME -p $env:NUGET_PASSWORD --store-password-in-clear-text;
+      - name: Build Solution
+        shell: pwsh
+        run: |
+          dotnet nuget add source $env:NUGET_HOST -n private -u $env:NUGET_USERNAME -p $env:NUGET_PASSWORD --store-password-in-clear-text;
 
-      #     dotnet build -c Release .\$env:APP_NAME.sln;
+          dotnet build -c Release .\$env:APP_NAME.sln;
 
-      #     if ($LastExitCode -ne 0)
-      #     { 
-      #         throw "error";
-      #     };
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
 
       # - name: Test Solution
       #   shell: pwsh
@@ -104,27 +104,27 @@ jobs:
       #         throw "error";
       #     };  
 
-      # - name: Build & Push Image
-      #   shell: pwsh
-      #   run: |
-      #     $env:CONTAINER_REGISTRY_HOST = az acr list -g $env:AZURE_GROUP_DELIVERY --query [0].loginServer -o tsv;
+      - name: Build & Push Image
+        shell: pwsh
+        run: |
+          $env:CONTAINER_REGISTRY_HOST = az acr list -g $env:AZURE_GROUP_DELIVERY --query [0].loginServer -o tsv;
 
-      #     az acr build `
-      #         --registry $env:CONTAINER_REGISTRY_HOST `
-      #         -t "$($env:IMAGE_NAME):latest" `
-      #         -t "$($env:IMAGE_NAME):$($env:VERSION)" `
-      #         --build-arg DOTNET_SDK_VERSION=$env:DOTNET_SDK_VERSION `
-      #         --build-arg DOTNET_ASPNET_VERSION=$env:DOTNET_ASPNET_VERSION `
-      #         --build-arg CONTAINER_REGISTRY_SOURCE_LABEL=https://github.com/$env:GITHUB_REPOSITORY `
-      #         --build-arg NUGET_HOST=$env:NUGET_HOST `
-      #         --build-arg NUGET_USERNAME=$env:NUGET_USERNAME `
-      #         --build-arg NUGET_PASSWORD=$env:NUGET_PASSWORD `
-      #         ./
+          az acr build `
+              --registry $env:CONTAINER_REGISTRY_HOST `
+              -t "$($env:IMAGE_NAME):latest" `
+              -t "$($env:IMAGE_NAME):$($env:VERSION)" `
+              --build-arg DOTNET_SDK_VERSION=$env:DOTNET_SDK_VERSION `
+              --build-arg DOTNET_ASPNET_VERSION=$env:DOTNET_ASPNET_VERSION `
+              --build-arg CONTAINER_REGISTRY_SOURCE_LABEL=https://github.com/$env:GITHUB_REPOSITORY `
+              --build-arg NUGET_HOST=$env:NUGET_HOST `
+              --build-arg NUGET_USERNAME=$env:NUGET_USERNAME `
+              --build-arg NUGET_PASSWORD=$env:NUGET_PASSWORD `
+              ./
 
-      #     if ($LastExitCode -ne 0) 
-      #     { 
-      #         throw "error";
-      #     };  
+          if ($LastExitCode -ne 0) 
+          { 
+              throw "error";
+          };  
 
       # - name: Database Migration & User
       #   shell: pwsh
@@ -174,103 +174,102 @@ jobs:
       #     echo "SQL_HOST=$env:SQL_HOST" >> $env:GITHUB_ENV;
       #     echo "SQL_PORT=$env:SQL_PORT" >> $env:GITHUB_ENV;
 
-      - name: Create Fileshare
-        shell: pwsh
-        run: |
-          $env:STORAGE_ACCOUNT_NAME = az storage account list -g $env:AZURE_GROUP_STORAGE --query [0].name -o tsv;
-
-          $env:FILE_SHARE_EXISTS = az storage share-rm exists `
-              -g $env:AZURE_GROUP_STORAGE `
-              -n $env:STORAGE_SHARE_NAME `
-              --storage-account $env:STORAGE_ACCOUNT_NAME `
-              --query exists;
-
-          if ($env:FILE_SHARE_EXISTS -eq "false")
-          { 
-              az storage share-rm create `
-                  -g $env:AZURE_GROUP_STORAGE `
-                  -n $env:STORAGE_SHARE_NAME `
-                  --storage-account $env:STORAGE_ACCOUNT_NAME `
-                  --access-tier TransactionOptimized `
-                  --quota $env:STORAGE_SIZE;
-          }
-          else
-          {
-              az storage share-rm update `
-                  -g $env:AZURE_GROUP_STORAGE `
-                  -n $env:STORAGE_SHARE_NAME `
-                  --storage-account $env:STORAGE_ACCOUNT_NAME `
-                  --access-tier TransactionOptimized `
-                  --quota $env:STORAGE_SIZE;
-          }
-
-          if ($LastExitCode -ne 0) 
-          { 
-              throw "error";
-          };
-
-          $env:BACKUP_VAULT_NAME = az backup vault list -g $env:AZURE_GROUP_BACKUP --query [0].name -o tsv;
-
-          az backup protection enable-for-azurefileshare `
-              -g $env:AZURE_GROUP_BACKUP `
-              -v $env:BACKUP_VAULT_NAME `
-              -p $env:STORAGE_ACCOUNT_NAME-fileshare-backup-policy `
-              --storage-account $env:STORAGE_ACCOUNT_NAME `
-              --azure-file-share $env:STORAGE_SHARE_NAME;
-
-          if ($LastExitCode -ne 0) 
-          { 
-              throw "error";
-          };
-
-
-      # - name: Kubernetes Deploy
+      # - name: Create Fileshare
       #   shell: pwsh
       #   run: |
-      #     $env:CONTAINER_REGISTRY_HOST = az acr list -g $env:AZURE_GROUP_DELIVERY --query [0].loginServer -o tsv;
-      #     $env:SQL_CONNECTIONSTRING = "Server=$env:SQL_HOST;Port=$env:SQL_PORT;Database=$env:SQL_NAME;Uid=$env:SQL_USER;Pwd=$env:SQL_PASSWORD;SslMode=Preferred";
+      #     $env:STORAGE_ACCOUNT_NAME = az storage account list -g $env:AZURE_GROUP_STORAGE --query [0].name -o tsv;
 
-      #     Get-Content .kubernetes/auth-sql-secret.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/auth-sql-secret.tmp.yaml;
-      #     kubectl apply -f .kubernetes/auth-sql-secret.tmp.yaml;
-      #     if ($LastExitCode -ne 0)
+      #     $env:FILE_SHARE_EXISTS = az storage share-rm exists `
+      #         -g $env:AZURE_GROUP_STORAGE `
+      #         -n $env:STORAGE_SHARE_NAME `
+      #         --storage-account $env:STORAGE_ACCOUNT_NAME `
+      #         --query exists;
+
+      #     if ($env:FILE_SHARE_EXISTS -eq "false")
+      #     { 
+      #         az storage share-rm create `
+      #             -g $env:AZURE_GROUP_STORAGE `
+      #             -n $env:STORAGE_SHARE_NAME `
+      #             --storage-account $env:STORAGE_ACCOUNT_NAME `
+      #             --access-tier TransactionOptimized `
+      #             --quota $env:STORAGE_SIZE;
+      #     }
+      #     else
+      #     {
+      #         az storage share-rm update `
+      #             -g $env:AZURE_GROUP_STORAGE `
+      #             -n $env:STORAGE_SHARE_NAME `
+      #             --storage-account $env:STORAGE_ACCOUNT_NAME `
+      #             --access-tier TransactionOptimized `
+      #             --quota $env:STORAGE_SIZE;
+      #     }
+
+      #     if ($LastExitCode -ne 0) 
       #     { 
       #         throw "error";
       #     };
 
-      #     Get-Content .kubernetes/auth-jwt-secret.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/auth-jwt-secret.tmp.yaml;
-      #     kubectl apply -f .kubernetes/auth-jwt-secret.tmp.yaml;
-      #     if ($LastExitCode -ne 0)
+      #     $env:BACKUP_VAULT_NAME = az backup vault list -g $env:AZURE_GROUP_BACKUP --query [0].name -o tsv;
+
+      #     az backup protection enable-for-azurefileshare `
+      #         -g $env:AZURE_GROUP_BACKUP `
+      #         -v $env:BACKUP_VAULT_NAME `
+      #         -p $env:STORAGE_ACCOUNT_NAME-fileshare-backup-policy `
+      #         --storage-account $env:STORAGE_ACCOUNT_NAME `
+      #         --azure-file-share $env:STORAGE_SHARE_NAME;
+
+      #     if ($LastExitCode -ne 0) 
       #     { 
       #         throw "error";
       #     };
 
-      #     Get-Content .kubernetes/service.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/service.tmp.yaml;
-      #     kubectl apply -f .kubernetes/service.tmp.yaml;
-      #     if ($LastExitCode -ne 0)
-      #     { 
-      #         throw "error";
-      #     };
+      - name: Kubernetes Deploy
+        shell: pwsh
+        run: |
+          $env:CONTAINER_REGISTRY_HOST = az acr list -g $env:AZURE_GROUP_DELIVERY --query [0].loginServer -o tsv;
+          $env:SQL_CONNECTIONSTRING = "Server=$env:SQL_HOST;Port=$env:SQL_PORT;Database=$env:SQL_NAME;Uid=$env:SQL_USER;Pwd=$env:SQL_PASSWORD;SslMode=Preferred";
 
-      #     Get-Content .kubernetes/configmap.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/configmap.tmp.yaml;
-      #     kubectl apply -f .kubernetes/configmap.tmp.yaml;
-      #     if ($LastExitCode -ne 0)
-      #     { 
-      #         throw "error";
-      #     };
+          Get-Content .kubernetes/auth-sql-secret.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/auth-sql-secret.tmp.yaml;
+          kubectl apply -f .kubernetes/auth-sql-secret.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
 
-      #     Get-Content .kubernetes/deployment.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/deployment.tmp.yaml;
-      #     kubectl apply -f .kubernetes/deployment.tmp.yaml;
-      #     if ($LastExitCode -ne 0)
-      #     { 
-      #         throw "error";
-      #     };
+          Get-Content .kubernetes/auth-jwt-secret.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/auth-jwt-secret.tmp.yaml;
+          kubectl apply -f .kubernetes/auth-jwt-secret.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
 
-      #     Get-Content .kubernetes/autoscaler.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/autoscaler.tmp.yaml;
-      #     kubectl apply -f .kubernetes/autoscaler.tmp.yaml;
-      #     if ($LastExitCode -ne 0)
-      #     { 
-      #         throw "error";
-      #     };
+          Get-Content .kubernetes/service.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/service.tmp.yaml;
+          kubectl apply -f .kubernetes/service.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          Get-Content .kubernetes/configmap.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/configmap.tmp.yaml;
+          kubectl apply -f .kubernetes/configmap.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          Get-Content .kubernetes/deployment.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/deployment.tmp.yaml;
+          kubectl apply -f .kubernetes/deployment.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          Get-Content .kubernetes/autoscaler.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/autoscaler.tmp.yaml;
+          kubectl apply -f .kubernetes/autoscaler.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
 
       - name: GitHub Release
         if: github.ref == 'refs/heads/main'
