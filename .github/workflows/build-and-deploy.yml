@@ -224,7 +224,7 @@ jobs:
               throw "error";
           };
 
-          echo "STORAGE_ACCOUNT_NAME=$env:STORAGE_ACCOUNT_NAMESTORAGE_ACCOUNT_NAME" >> $env:GITHUB_ENV;
+          echo "STORAGE_ACCOUNT_NAME=$env:STORAGE_ACCOUNT_NAME" >> $env:GITHUB_ENV;
 
       - name: Kubernetes Deploy
         shell: pwsh
