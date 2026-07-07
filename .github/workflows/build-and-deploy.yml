@@ -259,15 +259,12 @@ jobs:
               throw "error";
           };
 
-          echo "AAAA";
-          echo $env:KUBERNETES_NAMESPACE;
-
           az identity federated-credential create `
               --name $env:SERVICE_NAME-credentials `
               --resource-group $env:AZURE_GROUP_KUBERNETES `
               --identity-name $env:IDENTITY_NAME `
               --issuer $env:KUBERNETES_ISSUER_URL `
-              --subject system:serviceaccount:$env:KUBERNETES_NAMESPACE:$env:SERVICE_NAME-service-account `
+              --subject system:serviceaccount:${env:KUBERNETES_NAMESPACE}:$env:S{ERVICE_NAME}-service-account `
               --audience api://AzureADTokenExchange;
 
           if ($LastExitCode -ne 0)
