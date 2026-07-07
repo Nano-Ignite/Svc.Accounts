@@ -236,6 +236,8 @@ jobs:
 
           if (-not $env:PRINCIPAL_ID)
           {
+              echo "AAAA";
+
               az identity create `
                   -g $env:AZURE_GROUP_KUBERNETES `
                   -n $env:IDENTITY_NAME;
@@ -245,7 +247,7 @@ jobs:
                   throw "error";
               };
 
-              $env:IDENTITY_PRINCIPAL_ID = az identity show -g $env:AZURE_RESOURCE_GROUP -n $env:IDENTITY_NAME --query principalId -o tsv;
+              $env:IDENTITY_PRINCIPAL_ID = az identity show -g $env:AZURE_GROUP_KUBERNETES -n $env:IDENTITY_NAME --query principalId -o tsv;
           }
 
           az role assignment create `
