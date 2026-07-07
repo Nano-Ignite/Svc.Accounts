@@ -18,3 +18,4 @@ spec:
       resourceGroup: %AZURE_GROUP_STORAGE%
       azureStorageAuthType: msi
       azureStorageIdentityClientID: %IDENTITY_CLIENT_ID%
+      mountWithWorkloadIdentityToken: "true"

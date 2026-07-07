@@ -251,8 +251,14 @@ jobs:
           az role assignment create `
               --assignee-object-id $env:IDENTITY_PRINCIPAL_ID `
               --assignee-principal-type ServicePrincipal `
-              --role "Storage File Data SMB Share Contributor" `
-              --scope $env:STORAGE_ACCOUNT_ID;
+              --role "Storage File Data SMB MI Admin" `
+              --scope $env:STORAGE_ACCOUNT_ID
+
+          # az role assignment create `
+          #     --assignee-object-id $env:IDENTITY_PRINCIPAL_ID `
+          #     --assignee-principal-type ServicePrincipal `
+          #     --role "Storage File Data SMB Share Contributor" `
+          #     --scope $env:STORAGE_ACCOUNT_ID;
 
           if ($LastExitCode -ne 0)
           {
@@ -280,8 +286,6 @@ jobs:
           $env:CONTAINER_REGISTRY_HOST = az acr list -g $env:AZURE_GROUP_DELIVERY --query [0].loginServer -o tsv;
           $env:SQL_CONNECTIONSTRING = "Server=$env:SQL_HOST;Port=$env:SQL_PORT;Database=$env:SQL_NAME;Uid=$env:SQL_USER;Pwd=$env:SQL_PASSWORD;SslMode=Required";
           $env:IDENTITY_CLIENT_ID = az identity show -g $env:AZURE_GROUP_KUBERNETES -n $env:IDENTITY_NAME --query clientId -o tsv;
-
-          echo $env:IDENTITY_CLIENT_ID;
 
           Get-Content .kubernetes/service-account.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/service-account.tmp.yaml;
           kubectl apply -f .kubernetes/service-account.tmp.yaml;
