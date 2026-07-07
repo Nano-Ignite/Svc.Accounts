@@ -2,6 +2,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: %SERVICE_NAME%-azurefile-pv
+  namespace: %KUBERNETES_NAMESPACE%
 spec:
   capacity:
     storage: %STORAGE_SIZE%
