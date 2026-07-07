@@ -234,10 +234,8 @@ jobs:
           $env:KUBERNETES_ISSUER_URL = az aks list -g $env:AZURE_GROUP_KUBERNETES --query [0].['oidcIssuerProfile.issuerUrl'] -o tsv;
           $env:STORAGE_ACCOUNT_ID = az storage account list -g $env:AZURE_GROUP_STORAGE --query [0].id -o tsv;
 
-          if (-not $env:PRINCIPAL_ID)
+          if (-not $env:IDENTITY_PRINCIPAL_ID)
           {
-              echo "AAAA";
-
               az identity create `
                   -g $env:AZURE_GROUP_KUBERNETES `
                   -n $env:IDENTITY_NAME;
