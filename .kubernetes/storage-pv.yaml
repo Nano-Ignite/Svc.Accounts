@@ -17,4 +17,4 @@ spec:
       storageAccount: %STORAGE_ACCOUNT_NAME%
       resourceGroup: %AZURE_GROUP_STORAGE%
       azureStorageAuthType: msi
-      azureStorageIdentityClientID: %STORAGE_IDENTITY_CLIENT_ID%
+      azureStorageIdentityClientID: %IDENTITY_CLIENT_ID%
