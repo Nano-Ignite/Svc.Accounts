@@ -16,6 +16,5 @@ spec:
       shareName: %STORAGE_SHARE_NAME%
       storageAccount: %STORAGE_ACCOUNT_NAME%
       resourceGroup: %AZURE_GROUP_STORAGE%
-      azureStorageAuthType: msi
-      azureStorageIdentityClientID: %IDENTITY_CLIENT_ID%
+      clientID: %IDENTITY_CLIENT_ID%
       mountWithWorkloadIdentityToken: "true"
