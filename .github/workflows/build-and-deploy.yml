@@ -281,6 +281,8 @@ jobs:
           $env:SQL_CONNECTIONSTRING = "Server=$env:SQL_HOST;Port=$env:SQL_PORT;Database=$env:SQL_NAME;Uid=$env:SQL_USER;Pwd=$env:SQL_PASSWORD;SslMode=Required";
           $env:IDENTITY_CLIENT_ID = az identity show -g $env:AZURE_GROUP_KUBERNETES -n $env:IDENTITY_NAME --query clientId -o tsv;
 
+          echo $env:IDENTITY_CLIENT_ID;
+
           Get-Content .kubernetes/service-account.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/service-account.tmp.yaml;
           kubectl apply -f .kubernetes/service-account.tmp.yaml;
           if ($LastExitCode -ne 0)
