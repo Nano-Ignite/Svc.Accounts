@@ -233,7 +233,7 @@ jobs:
           $env:KUBERNETES_ISSUER_URL = az aks list -g $env:AZURE_GROUP_KUBERNETES --query [0].['oidcIssuerProfile.issuerUrl'] -o tsv;
 
           az identity federated-credential create `
-              --name $env:SERVICE_NAME-azurefile-federated `
+              --name $env:SERVICE_NAME-credentials `
               --resource-group $env:AZURE_GROUP_STORAGE `
               --identity-name $env:AZURE_FILE_IDENTITY_NAME `
               --issuer $env:KUBERNETES_ISSUER_URL `
