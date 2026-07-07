@@ -105,9 +105,13 @@ spec:
           mountPath: /mnt/%STORAGE_SHARE_NAME%
         - name: tmp
           mountPath: /tmp
+        - name: wwwroot
+          mountPath: /app/wwwroot
       volumes:
       - name: %SERVICE_NAME%-volume
         persistentVolumeClaim:
           claimName: %SERVICE_NAME%-azurefile-pvc
       - name: tmp
+        emptyDir: {}
+      - name: wwwroot
         emptyDir: {}
