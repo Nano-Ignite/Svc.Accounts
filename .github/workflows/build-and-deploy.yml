@@ -267,7 +267,7 @@ jobs:
 
           az identity federated-credential create `
               --name $env:SERVICE_NAME-credentials `
-              --resource-group $env:AZURE_GROUP_STORAGE `
+              --resource-group $env:AZURE_GROUP_KUBERNETES `
               --identity-name $env:IDENTITY_NAME `
               --issuer $env:KUBERNETES_ISSUER_URL `
               --subject system:serviceaccount:$env:KUBERNETES_NAMESPACE:$env:SERVICE_NAME-service-account `
