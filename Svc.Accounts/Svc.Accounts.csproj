@@ -39,8 +39,4 @@
 	    <ProjectReference Include="..\Svc.Accounts.Models\Svc.Accounts.Models.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="NewFolder\" />
-	</ItemGroup>
-
 </Project>
