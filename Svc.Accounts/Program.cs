@@ -8,6 +8,7 @@ using Nano.Logging.Serilog;
 using Nano.Storage.Azure;
 using Nano.Storage.Extensions;
 using Svc.Accounts.Data;
+using Svc.Accounts.NewFolder;
 
 NanoApiApplication
     .ConfigureApp()
@@ -15,7 +16,7 @@ NanoApiApplication
     {
         x.AddNanoLogging<SerilogProvider>();
         x.AddNanoData<MySqlProvider, AccountsDbContext>();
-        x.AddNanoEventing<RabbitMqProvider>();
+        x.AddNanoEventing<RabbitMqProvider2>();
         x.AddNanoStorage<AzureFileshareProvider>();
     })
     .Build()
