@@ -44,6 +44,16 @@ spec:
             secretKeyRef:
               name: %SERVICE_NAME%-sql-auth-secret
               key: data-connectionstring
+        - name: Eventing__Credentials__Host
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq-default-user
+              key: host
+        - name: Eventing__Credentials__Port
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq-default-user
+              key: port
         - name: Eventing__Credentials__Id
           valueFrom:
             secretKeyRef:
