@@ -16,7 +16,7 @@ NanoApiApplication
         x.AddNanoLogging<SerilogProvider>();
         x.AddNanoData<MySqlProvider, AccountsDbContext>();
         x.AddNanoEventing<RabbitMqProvider>();
-        x.AddNanoStorage<Svc.Accounts.NewFolder.AzureFileshareProvider>();
+        x.AddNanoStorage<AzureFileshareProvider>();
     })
     .Build()
     .Run();
