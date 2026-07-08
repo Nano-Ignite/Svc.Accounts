@@ -32,10 +32,6 @@ internal static class HealtCheckBuilderExtensions
                     ? $"amqp://{options.CurrentValue.Host}:{options.CurrentValue.Port}{options.CurrentValue.VHost}"
                     : $"amqp://{options.CurrentValue.Credentials.Id}:{options.CurrentValue.Credentials.Secret}@{options.CurrentValue.Host}:{options.CurrentValue.Port}{options.CurrentValue.VHost}";
 
-                Console.WriteLine("Id: " + options.CurrentValue.Credentials?.Id);
-                Console.WriteLine("Secret: " + options.CurrentValue.Credentials?.Secret);
-                Console.WriteLine("ConnectionString: " + connectionString);
-
                 var factory = new ConnectionFactory
                 {
                     Uri = new Uri(connectionString),

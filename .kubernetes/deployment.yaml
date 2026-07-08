@@ -47,12 +47,12 @@ spec:
         - name: Eventing__Credentials__Id
           valueFrom:
             secretKeyRef:
-              name: rabbitmq-auth
+              name: rabbitmq-default-user
               key: username
         - name: Eventing__Credentials__Secret
           valueFrom:
             secretKeyRef:
-              name: rabbitmq-auth
+              name: rabbitmq-default-user
               key: password
         - name: App__Authentication__Jwt__PublicKey
           valueFrom:
