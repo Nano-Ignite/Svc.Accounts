@@ -20,7 +20,7 @@ public class Address : BaseEntity
     /// <summary>
     /// Country.
     /// </summary>
-    public virtual Country Country { get; set; } = null!;
+    public virtual Country? Country { get; set; }
 
     /// <summary>
     /// City.
@@ -30,8 +30,17 @@ public class Address : BaseEntity
     /// <summary>
     /// Street Name.
     /// </summary>
+    [Required]
     [MaxLength(512)]
-    public virtual string? StreetName { get; set; }
+    public virtual string StreetName
+    {
+        get;
+        set
+        {
+            field = value;
+            this.StreetNameNormalized = value.ToUpper();
+        }
+    } = null!;
 
     /// <summary>
     /// Street Name Normalized.

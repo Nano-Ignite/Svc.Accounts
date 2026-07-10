@@ -14,8 +14,16 @@ public class Tenant : BaseEntity
     /// Name.
     /// </summary>
     [Required]
-    [MaxLength(256)]
-    public virtual string Name { get; internal set; } = null!;
+    [MaxLength(128)]
+    public virtual string Name
+    {
+        get;
+        set
+        {
+            field = value;
+            this.NameNormalized = value.ToUpper();
+        }
+    } = null!;
 
     /// <summary>
     /// Name Normalized.

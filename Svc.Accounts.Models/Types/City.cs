@@ -4,15 +4,24 @@ using Z.EntityFramework.Plus;
 namespace Svc.Accounts.Models.Types;
 
 /// <summary>
-/// City
+/// City.
 /// </summary>
 public class City
 {
     /// <summary>
     /// Name.
     /// </summary>
+    [Required]
     [MaxLength(128)]
-    public virtual string? Name { get; set; }
+    public virtual string Name
+    {
+        get;
+        set
+        {
+            field = value;
+            this.NameNormalized = value.ToUpper();
+        }
+    } = null!;
 
     /// <summary>
     /// Name Normalized.

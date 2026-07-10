@@ -51,7 +51,8 @@ public class UserMapping : BaseEntityUserMapping<User>
             .WithOne();
             
         builder
-            .Property(x => x.DateOfBirth);
+            .Property(x => x.DateOfBirth)
+            .IsRequired();
 
         builder
             .HasIndex(x => x.DateOfBirth);

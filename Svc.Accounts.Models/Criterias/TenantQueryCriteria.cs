@@ -23,7 +23,7 @@ public class TenantQueryCriteria : BaseQueryCriteria
         if (!string.IsNullOrEmpty(this.Name))
         {
             expression
-                .StartsWith(nameof(Country.NameNormalized), this.Name.ToUpper());
+                .StartsWith(nameof(Tenant.NameNormalized), this.Name.ToUpper());
         }
 
         expressions

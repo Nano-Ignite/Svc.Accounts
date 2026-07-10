@@ -12,16 +12,16 @@ using Nano.Eventing.Abstractions;
 using Nano.Storage.Abstractions;
 using Svc.Accounts.Models.Criterias;
 using Svc.Accounts.Models.Data;
-using Svc.Accounts.Models.Enums;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Lib.Images.Extensions;
 using Nano.Common.Extensions;
 using Svc.Accounts.Consts;
-using Svc.Accounts.Extensions;
+using Svc.Accounts.Models.Api.Requests.Enums;
 
 namespace Svc.Accounts.Controllers;
 
@@ -40,40 +40,7 @@ public class UsersController(ILogger<UsersController> logger, IRepository reposi
         this.pathProvider = pathProvider ?? throw new ArgumentNullException(nameof(pathProvider));
     }
 
-    /// <summary>
-    /// Anonymously gets a user by id.
-    /// </summary>
-    /// <param name="id">The identifier, that uniquely identifies the user.</param>
-    /// <param name="includeDepth">The include depth.</param>
-    /// <param name="cancellationToken">The token used when request is cancelled.</param>
-    /// <returns>The model.</returns>
-    /// <response code="200">Success.</response>
-    /// <response code="400">Bad Request.</response>
-    /// <response code="401">Unauthorized.</response>
-    /// <response code="404">Not Found.</response>
-    /// <response code="500">Error occured.</response>
-    [HttpGet]
-    [Route("details/{id:guid}")]
-    [AllowAnonymous]
-    [ResponseCache(NoStore = true)]
-    [Produces(HttpContentType.JSON)]
-    [ProducesResponseType(typeof(User), (int)HttpStatusCode.OK)]
-    [ProducesResponseType((int)HttpStatusCode.NotFound)]
-    [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-    public override async Task<IActionResult> DetailsAsync([FromRoute][Required] Guid id, [FromQuery] int? includeDepth, CancellationToken cancellationToken = default)
-    {
-        var result = await this.Repository
-            .GetAsync<User>(id, cancellationToken);
-
-        if (result == null)
-        {
-            return this.NotFound();
-        }
-
-        return this.Ok(result);
-    }
+    // BUG: Remove "Profile" naming
 
     /// <summary>
     /// Anonymously get a yser by email.
@@ -242,6 +209,7 @@ public class UsersController(ILogger<UsersController> logger, IRepository reposi
 
         return this.Ok();
     }
+
 
     private string GetProfilePictureFilename(User user, ImageType type)
     {

@@ -23,7 +23,7 @@ public class TenantMapping : BaseEntityMapping<Tenant>
 
         builder
             .Property(x => x.NameNormalized)
-            .HasMaxLength(256)
+            .HasMaxLength(128)
             .IsRequired();
 
         builder

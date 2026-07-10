@@ -2,8 +2,8 @@
 using Nano.App.ApiClient.Annotations;
 using Nano.App.ApiClient.Annotations.Actions;
 using Nano.App.ApiClient.Requests;
+using Svc.Accounts.Models.Api.Requests.Enums;
 using Svc.Accounts.Models.Data;
-using Svc.Accounts.Models.Enums;
 
 namespace Svc.Accounts.Models.Api.Requests;
 

@@ -1,4 +1,4 @@
-﻿namespace Svc.Accounts.Models.Enums;
+﻿namespace Svc.Accounts.Models.Api.Requests.Enums;
 
 /// <summary>
 /// Image Type.

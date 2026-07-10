@@ -36,7 +36,7 @@ public class User : BaseEntityUser
     /// <summary>
     /// Tenant.
     /// </summary>
-    public virtual Tenant Tenant { get; set; } = null!;
+    public virtual Tenant? Tenant { get; set; }
 
     /// <summary>
     /// First Name.
@@ -94,7 +94,6 @@ public class User : BaseEntityUser
     /// <summary>
     /// Address Id.
     /// </summary>
-    [Required]
     public virtual Guid? AddressId { get; set; }
 
     /// <summary>

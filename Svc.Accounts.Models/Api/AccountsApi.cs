@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Svc.Accounts.Models.Data;
-using Svc.Accounts.Models.Enums;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Nano.App.ApiClient;
 using Nano.App.ApiClient.Models;
 using Svc.Accounts.Models.Api.Requests;
+using Svc.Accounts.Models.Api.Requests.Enums;
 
 namespace Svc.Accounts.Models.Api;
 
