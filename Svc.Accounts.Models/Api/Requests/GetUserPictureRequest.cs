@@ -10,7 +10,7 @@ namespace Svc.Accounts.Models.Api.Requests;
 /// <summary>
 /// Get User Picture Request.
 /// </summary>
-[GetAction("profile-picture")]
+[GetAction("user-picture")]
 public class GetUserPictureRequest : BaseRequest
 {
     /// <summary>

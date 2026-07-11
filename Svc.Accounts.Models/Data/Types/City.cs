@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Z.EntityFramework.Plus;
 
-namespace Svc.Accounts.Models.Types;
+namespace Svc.Accounts.Models.Data.Types;
 
 /// <summary>
 /// City.

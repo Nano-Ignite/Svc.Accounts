@@ -1,4 +1,4 @@
-﻿namespace Svc.Accounts.Models.Enums;
+﻿namespace Svc.Accounts.Models.Data.Enums;
 
 /// <summary>
 /// Language.

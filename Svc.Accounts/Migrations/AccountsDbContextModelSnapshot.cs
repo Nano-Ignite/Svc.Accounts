@@ -666,7 +666,7 @@ namespace Svc.Accounts.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("varchar(128)");
 
-                    b.Property<string>("ProfilePictureExtension")
+                    b.Property<string>("UserPictureExtension")
                         .HasMaxLength(32)
                         .HasColumnType("varchar(32)");
 

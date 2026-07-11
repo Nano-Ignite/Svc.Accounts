@@ -10,7 +10,7 @@ namespace Svc.Accounts.Models.Api.Requests;
 /// <summary>
 /// Add User Picture Request.
 /// </summary>
-[PostAction("profile-picture/add")]
+[PostAction("user-picture/add")]
 public class AddUserPictureRequest : BaseRequest
 {
     /// <summary>

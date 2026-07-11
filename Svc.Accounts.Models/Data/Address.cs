@@ -1,7 +1,7 @@
 ﻿using Nano.Data.Abstractions.Models;
-using Svc.Accounts.Models.Types;
 using System;
 using System.ComponentModel.DataAnnotations;
+using Svc.Accounts.Models.Data.Types;
 using Z.EntityFramework.Plus;
 
 namespace Svc.Accounts.Models.Data;

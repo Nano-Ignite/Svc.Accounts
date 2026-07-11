@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Nano.Data.Abstractions.Models.Abstractions;
-using Svc.Accounts.Models.Types;
+using Svc.Accounts.Models.Data.Types;
 
 namespace Svc.Accounts.Data.Mappings.Extensions;
 

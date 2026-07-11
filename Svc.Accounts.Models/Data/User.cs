@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Nano.Data.Abstractions.Annotations;
 using Nano.Data.Abstractions.Eventing.Annotations;
 using Nano.Data.Abstractions.Models;
-using Svc.Accounts.Models.Enums;
+using Svc.Accounts.Models.Data.Enums;
 using Svc.Accounts.Models.Extensions;
 using Z.EntityFramework.Plus;
 
@@ -132,5 +132,5 @@ public class User : BaseEntityUser
     /// Profile Picture Extension
     /// </summary>
     [MaxLength(32)]
-    public virtual string? ProfilePictureExtension { get; set; }
+    public virtual string? UserPictureExtension { get; set; }
 }

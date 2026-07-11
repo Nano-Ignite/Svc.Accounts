@@ -29,7 +29,7 @@ namespace Svc.Accounts.Controllers;
 public class UsersController(ILogger<UsersController> logger, IRepository repository, IEventing eventing, IIdentityRepository identityRepository)
     : BaseEntityUserController<User, UserQueryCriteria>(logger, repository, eventing, identityRepository)
 {
-    private const string PROFILE_PICTURE_PREFIX = "profile-picture";
+    private const string USER_PICTURE_PREFIX = "user-picture";
 
     private readonly IPathProvider pathProvider = null!;
 
@@ -39,8 +39,6 @@ public class UsersController(ILogger<UsersController> logger, IRepository reposi
     {
         this.pathProvider = pathProvider ?? throw new ArgumentNullException(nameof(pathProvider));
     }
-
-    // BUG: Remove "Profile" naming
 
     /// <summary>
     /// Anonymously get a yser by email.
@@ -77,38 +75,38 @@ public class UsersController(ILogger<UsersController> logger, IRepository reposi
     }
 
     /// <summary>
-    /// Get Profile Picture.
+    /// Get user Picture.
     /// </summary>
     /// <param name="id">The user id.</param>
     /// <param name="type">THe image type.</param>
     /// <param name="cancellationToken">The token used when request is cancelled.</param>
-    /// <returns>The profile picture.</returns>
+    /// <returns>The user picture.</returns>
     /// <response code="200">OK.</response>
     /// <response code="404">Not Found.</response>
     /// <response code="400">Bad Request.</response>
     /// <response code="401">Unauthorized.</response>
     /// <response code="500">Error occurred.</response>
     [HttpGet]
-    [Route("profile-picture/{type}/{id:guid}")]
+    [Route("user-picture/{type}/{id:guid}")]
     [Produces(HttpContentType.JPEG, HttpContentType.PNG)]
     [ProducesResponseType(typeof(FileStreamResult), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-    public virtual async Task<IActionResult> GetProfilePictureAsync([FromRoute][Required] Guid id, [FromRoute][Required] ImageType type, CancellationToken cancellationToken = default)
+    public virtual async Task<IActionResult> GetUserPictureAsync([FromRoute][Required] Guid id, [FromRoute][Required] ImageType type, CancellationToken cancellationToken = default)
     {
         try
         {
             var user = await this.Repository
                 .GetAsync<User>(id, cancellationToken);
 
-            if (user?.ProfilePictureExtension == null)
+            if (user?.UserPictureExtension == null)
             {
                 return this.NotFound();
             }
 
-            var filename = this.GetProfilePictureFilename(user, type);
+            var filename = this.GetUserPictureFilename(user, type);
             var path = Path.Combine(this.pathProvider.Root, filename);
             var bytes = await System.IO.File.ReadAllBytesAsync(path, cancellationToken);
             var extension = Path.GetExtension(path);
@@ -128,7 +126,7 @@ public class UsersController(ILogger<UsersController> logger, IRepository reposi
     }
 
     /// <summary>
-    /// Add Profile Picture.
+    /// Add User Picture.
     /// </summary>
     /// <param name="id">The user id.</param>
     /// <param name="file">The file.</param>
@@ -140,7 +138,7 @@ public class UsersController(ILogger<UsersController> logger, IRepository reposi
     /// <response code="401">Unauthorized.</response>
     /// <response code="500">Error occurred.</response>
     [HttpPost]
-    [Route("profile-picture/add/{id:guid}")]
+    [Route("user-picture/add/{id:guid}")]
     [RequestSizeLimit(1024 * 1024 * 1024)]
     [Consumes(HttpContentType.FORM)]
     [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -148,7 +146,7 @@ public class UsersController(ILogger<UsersController> logger, IRepository reposi
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-    public virtual async Task<IActionResult> AddProfilePictureAsync([FromRoute][Required] Guid id, [Required][FileExtensionValidation(FileExtensions.JPG, FileExtensions.JPEG, FileExtensions.PNG)] IFormFile file, CancellationToken cancellationToken = default)
+    public virtual async Task<IActionResult> AddUserPictureAsync([FromRoute][Required] Guid id, [Required][FileExtensionValidation(FileExtensions.JPG, FileExtensions.JPEG, FileExtensions.PNG)] IFormFile file, CancellationToken cancellationToken = default)
     {
         var extension = Path.GetExtension(file.FileName);
 
@@ -160,19 +158,19 @@ public class UsersController(ILogger<UsersController> logger, IRepository reposi
             return this.NotFound();
         }
 
-        user.ProfilePictureExtension = extension;
+        user.UserPictureExtension = extension;
 
         user = await this.Repository
             .UpdateAsync(user, cancellationToken);
 
-        await this.SaveProfilePictureAsync(file, user, ImageType.Thunbnail, cancellationToken);
-        await this.SaveProfilePictureAsync(file, user, ImageType.Full, cancellationToken);
+        await this.SaveUserPictureAsync(file, user, ImageType.Thunbnail, cancellationToken);
+        await this.SaveUserPictureAsync(file, user, ImageType.Full, cancellationToken);
 
         return this.Ok();
     }
 
     /// <summary>
-    /// Remove Profile Picture.
+    /// Remove User Picture.
     /// </summary>
     /// <param name="id">The user id.</param>
     /// <param name="cancellationToken">The token used when request is cancelled.</param>
@@ -183,26 +181,26 @@ public class UsersController(ILogger<UsersController> logger, IRepository reposi
     /// <response code="401">Unauthorized.</response>
     /// <response code="500">Error occurred.</response>
     [HttpDelete]
-    [Route("profile-picture/remove/{id:guid}")]
+    [Route("user-picture/remove/{id:guid}")]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-    public virtual async Task<IActionResult> RemoveProfilePictureAsync([FromRoute][Required] Guid id, CancellationToken cancellationToken = default)
+    public virtual async Task<IActionResult> RemoveUserPictureAsync([FromRoute][Required] Guid id, CancellationToken cancellationToken = default)
     {
         var user = await this.Repository
             .GetAsync<User>(id, cancellationToken);
 
-        if (user?.ProfilePictureExtension == null)
+        if (user?.UserPictureExtension == null)
         {
             return this.NotFound();
         }
 
-        this.DeleteProfilePictureAsync(user, ImageType.Thunbnail);
-        this.DeleteProfilePictureAsync(user, ImageType.Full);
+        this.DeleteUserPictureAsync(user, ImageType.Thunbnail);
+        this.DeleteUserPictureAsync(user, ImageType.Full);
 
-        user.ProfilePictureExtension = null;
+        user.UserPictureExtension = null;
 
         await this.Repository
             .UpdateAsync(user, cancellationToken);
@@ -211,13 +209,13 @@ public class UsersController(ILogger<UsersController> logger, IRepository reposi
     }
 
 
-    private string GetProfilePictureFilename(User user, ImageType type)
+    private string GetUserPictureFilename(User user, ImageType type)
     {
         ArgumentNullException.ThrowIfNull(user);
 
-        return $"{PROFILE_PICTURE_PREFIX}-{type.ToString().ToLower()}-{user.Id}{user.ProfilePictureExtension}";
+        return $"{USER_PICTURE_PREFIX}-{type.ToString().ToLower()}-{user.Id}{user.UserPictureExtension}";
     }
-    private async Task SaveProfilePictureAsync(IFormFile file, User user, ImageType type, CancellationToken cancellationToken = default)
+    private async Task SaveUserPictureAsync(IFormFile file, User user, ImageType type, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(file);
         ArgumentNullException.ThrowIfNull(user);
@@ -232,18 +230,18 @@ public class UsersController(ILogger<UsersController> logger, IRepository reposi
         await using var resizeImage = image
             .ResizeImage(size, size);
 
-        var filename = this.GetProfilePictureFilename(user, type);
+        var filename = this.GetUserPictureFilename(user, type);
 
         var path = Path.Combine(this.pathProvider.Root, filename);
 
         await resizeImage
             .SaveFileAsync(path, cancellationToken);
     }
-    private void DeleteProfilePictureAsync(User user, ImageType type)
+    private void DeleteUserPictureAsync(User user, ImageType type)
     {
         ArgumentNullException.ThrowIfNull(user);
 
-        var filename = this.GetProfilePictureFilename(user, type);
+        var filename = this.GetUserPictureFilename(user, type);
         var path = Path.Combine(this.pathProvider.Root, filename);
 
         if (System.IO.File.Exists(path))

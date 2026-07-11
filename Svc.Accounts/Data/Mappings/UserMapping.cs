@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Nano.Data.Mappings.Identity;
 using Svc.Accounts.Models.Data;
-using Svc.Accounts.Models.Enums;
+using Svc.Accounts.Models.Data.Enums;
 
 namespace Svc.Accounts.Data.Mappings;
 
@@ -77,7 +77,7 @@ public class UserMapping : BaseEntityUserMapping<User>
             .HasIndex(x => x.Language);
 
         builder
-            .Property(x => x.ProfilePictureExtension)
+            .Property(x => x.UserPictureExtension)
             .HasMaxLength(32);
     }
 }
