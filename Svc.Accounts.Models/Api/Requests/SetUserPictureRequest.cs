@@ -10,8 +10,8 @@ namespace Svc.Accounts.Models.Api.Requests;
 /// <summary>
 /// Add User Picture Request.
 /// </summary>
-[PostAction("user-picture/add")]
-public class AddUserPictureRequest : BaseRequest
+[PostAction("{id}/user-picture/set")]
+public class SetUserPictureRequest : BaseRequest
 {
     /// <summary>
     /// Id.
@@ -28,7 +28,7 @@ public class AddUserPictureRequest : BaseRequest
     /// <summary>
     /// Constructor.
     /// </summary>
-    public AddUserPictureRequest()
+    public SetUserPictureRequest()
     {
         this.Controller = $"{nameof(User)}s";
     }

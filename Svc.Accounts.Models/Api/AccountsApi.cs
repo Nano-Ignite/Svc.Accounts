@@ -58,7 +58,7 @@ public class AccountsApi : BaseIdentityApiClient<User>
     /// <returns>Void.</returns>
     public virtual Task AddUserPictureAsync(Guid userId, IFormFile file, CancellationToken cancellationToken = default)
     {
-        return this.InvokeAsync(new AddUserPictureRequest
+        return this.InvokeAsync(new SetUserPictureRequest
         {
             Id = userId,
             File = file

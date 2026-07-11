@@ -10,19 +10,19 @@ namespace Svc.Accounts.Models.Api.Requests;
 /// <summary>
 /// Get User Picture Request.
 /// </summary>
-[GetAction("user-picture")]
+[GetAction("{id}/user-picture/{type}")]
 public class GetUserPictureRequest : BaseRequest
 {
     /// <summary>
     /// Id.
     /// </summary>
-    [Route(Order = 1)]
+    [Route(Order = 0)]
     public virtual Guid Id { get; set; }
 
     /// <summary>
     /// Type.
     /// </summary>
-    [Route(Order = 0)]
+    [Route(Order = 1)]
     public virtual ImageType Type { get; set; }
 
     /// <summary>

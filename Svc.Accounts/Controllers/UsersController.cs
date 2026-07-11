@@ -87,7 +87,7 @@ public class UsersController(ILogger<UsersController> logger, IRepository reposi
     /// <response code="401">Unauthorized.</response>
     /// <response code="500">Error occurred.</response>
     [HttpGet]
-    [Route("user-picture/{type}/{id:guid}")]
+    [Route("{id:guid}/user-picture/{type}")]
     [Produces(HttpContentType.JPEG, HttpContentType.PNG)]
     [ProducesResponseType(typeof(FileStreamResult), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -138,7 +138,7 @@ public class UsersController(ILogger<UsersController> logger, IRepository reposi
     /// <response code="401">Unauthorized.</response>
     /// <response code="500">Error occurred.</response>
     [HttpPost]
-    [Route("user-picture/add/{id:guid}")]
+    [Route("{id:guid}/user-picture/set")]
     [RequestSizeLimit(1024 * 1024 * 1024)]
     [Consumes(HttpContentType.FORM)]
     [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -181,7 +181,7 @@ public class UsersController(ILogger<UsersController> logger, IRepository reposi
     /// <response code="401">Unauthorized.</response>
     /// <response code="500">Error occurred.</response>
     [HttpDelete]
-    [Route("user-picture/remove/{id:guid}")]
+    [Route("{id:guid}/user-picture/remove")]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]

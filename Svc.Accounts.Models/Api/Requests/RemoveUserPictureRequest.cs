@@ -9,7 +9,7 @@ namespace Svc.Accounts.Models.Api.Requests;
 /// <summary>
 /// Remove User Picture Request.
 /// </summary>
-[DeleteAction("user-picture/remove")]
+[DeleteAction("{id}/user-picture/remove")]
 public class RemoveUserPictureRequest : BaseRequest
 {
     /// <summary>
