@@ -10,6 +10,7 @@ services:
       dockerfile: "Dockerfile.Local"
     depends_on:
       - database
+      - eventing
     networks:
       - network
     volumes:
