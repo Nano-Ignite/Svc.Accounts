@@ -23,11 +23,8 @@ services:
     networks:
       - network
     environment:
-      MYSQL_USER: sa
-      MYSQL_PASSWORD: myPassword_123
-      MYSQL_ROOT_PASSWORD: myPassword_123
-      MYSQL_DATABASE: accountsDb
       MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: myPassword_123
 
   eventing: 
     image: rabbitmq:management
