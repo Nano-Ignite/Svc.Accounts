@@ -17,7 +17,7 @@ namespace Svc.Accounts.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.7")
+                .HasAnnotation("ProductVersion", "10.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
@@ -599,8 +599,8 @@ namespace Svc.Accounts.Migrations
 
                     b.Property<string>("NameNormalized")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
 
                     b.HasKey("Id");
 
@@ -619,7 +619,7 @@ namespace Svc.Accounts.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("AddressId")
+                    b.Property<Guid?>("AddressId")
                         .HasColumnType("char(36)");
 
                     b.Property<DateTimeOffset>("CreatedAt")
@@ -666,12 +666,12 @@ namespace Svc.Accounts.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("varchar(128)");
 
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("UserPictureExtension")
                         .HasMaxLength(32)
                         .HasColumnType("varchar(32)");
-
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -829,12 +829,13 @@ namespace Svc.Accounts.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("Svc.Accounts.Models.Types.City", "City", b1 =>
+                    b.OwnsOne("Svc.Accounts.Models.Data.Types.City", "City", b1 =>
                         {
                             b1.Property<Guid>("AddressId")
                                 .HasColumnType("char(36)");
 
                             b1.Property<string>("Name")
+                                .IsRequired()
                                 .HasMaxLength(128)
                                 .HasColumnType("varchar(128)");
 
@@ -871,9 +872,7 @@ namespace Svc.Accounts.Migrations
                 {
                     b.HasOne("Svc.Accounts.Models.Data.Address", "Address")
                         .WithOne()
-                        .HasForeignKey("Svc.Accounts.Models.Data.User", "AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Svc.Accounts.Models.Data.User", "AddressId");
 
                     b.HasOne("Nano.Data.Abstractions.Models.Identity.IdentityUserEx<System.Guid>", "IdentityUser")
                         .WithOne()
