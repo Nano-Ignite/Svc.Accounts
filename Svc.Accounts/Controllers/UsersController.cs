@@ -13,6 +13,7 @@ using Nano.Storage.Abstractions;
 using Svc.Accounts.Models.Criterias;
 using Svc.Accounts.Models.Data;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Net;
@@ -70,6 +71,34 @@ public class UsersController(ILogger<UsersController> logger, IRepository reposi
         {
             return this.NotFound();
         }
+
+        return this.Ok(user);
+    }
+
+    /// <summary>
+    /// Get new sign-ups.
+    /// </summary>
+    /// <param name="cancellationToken">The token used when request is cancelled.</param>
+    /// <returns>The users.</returns>
+    /// <response code="200">OK.</response>
+    /// <response code="404">Not Found.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="401">Unauthorized.</response>
+    /// <response code="500">Error occurred.</response>
+    [HttpGet]
+    [Route("new-signups")]
+    [AllowAnonymous]
+    [ResponseCache(NoStore = true)]
+    [Produces(HttpContentType.JSON)]
+    [ProducesResponseType(typeof(IEnumerable<User>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+    public virtual async Task<IActionResult> GetNewSignUpsAsync(CancellationToken cancellationToken = default)
+    {
+        var user = await this.Repository
+            .GetManyAsync<User>(x => x.CreatedAt > DateTimeOffset.UtcNow.AddHours(-2), cancellationToken);
 
         return this.Ok(user);
     }

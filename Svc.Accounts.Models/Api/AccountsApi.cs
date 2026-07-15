@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Svc.Accounts.Models.Data;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Nano.App.ApiClient;
@@ -77,5 +78,15 @@ public class AccountsApi : BaseIdentityApiClient<User>
         {
             Id = userId
         }, cancellationToken);
+    }
+
+    /// <summary>
+    /// Get New Sign-Ups Async.
+    /// </summary>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
+    /// <returns>A Collection of <see cref="User"/>.</returns>
+    public virtual async Task<IEnumerable<User>> GetNewSignUpsAsync(CancellationToken cancellationToken = default)
+    {
+        return await this.InvokeAsync<UserNewSignUpsRequest, IEnumerable<User>>(new UserNewSignUpsRequest(), cancellationToken) ?? [];
     }
 }
