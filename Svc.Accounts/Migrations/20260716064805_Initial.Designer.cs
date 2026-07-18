@@ -12,7 +12,7 @@ using Svc.Accounts.Data;
 namespace Svc.Accounts.Migrations
 {
     [DbContext(typeof(AccountsDbContext))]
-    [Migration("20260715093635_Initial")]
+    [Migration("20260716064805_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
