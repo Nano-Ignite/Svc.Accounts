@@ -7,7 +7,9 @@ using MySqlConnector;
 using Nano.Common.Mvc.HealthChecks.Extensions;
 using Nano.Data.Abstractions;
 using Nano.Data.Abstractions.Config;
+using Nano.Data.Abstractions.Exceptions;
 using Nano.Data.Extensions;
+using Npgsql;
 using System;
 
 namespace Nano.Data.MySql;
@@ -130,5 +132,21 @@ public sealed class MySqlProvider2 : IDataProvider
 
         return dataSourceBuilder
             .Build();
+    }
+}
+
+
+internal sealed class MySqlExceptionTranslator2 : IDatabaseExceptionTranslator
+{
+    public Exception Translate(Exception exception)
+    {
+        ArgumentNullException.ThrowIfNull(exception);
+
+        if (exception is DbUpdateException { InnerException: MySqlException { Number: 1062 } } dbUpdateException)
+        {
+            return new UniqueConstraintViolationException(dbUpdateException);
+        }
+
+        return exception;
     }
 }

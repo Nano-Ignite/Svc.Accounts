@@ -14,7 +14,7 @@ NanoApiApplication
     .ConfigureServices(x =>
     {
         x.AddNanoLogging<SerilogProvider>();
-        x.AddNanoData<MySqlProvider2, AccountsDbContext>();
+        x.AddNanoData<PostgresSqlProvider2, AccountsDbContext>();
     })
     .Build()
     .Run();

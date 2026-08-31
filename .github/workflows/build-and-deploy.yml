@@ -35,7 +35,7 @@ env:
   KUBERNETES_CPU_REQUEST: 150m
   KUBERNETES_CPU_LIMIT: 450m
   KUBERNETES_CPU_SCALING: 180
-  SQL_TYPE: mysql
+  SQL_TYPE: postgresql
   SQL_AUTH_TYPE: Azure
   SQL_NAME: accountsDb
   AUTH_JWT_PUBLIC_KEY: ${{ github.ref == 'refs/heads/main' && secrets.PRODUCTION_AUTH_JWT_PUBLIC_KEY || secrets.STAGING_AUTH_JWT_PUBLIC_KEY }}
