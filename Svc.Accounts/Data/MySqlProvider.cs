@@ -49,7 +49,16 @@ public sealed class MySqlProvider2 : IDataProvider
 
         var batchSize = options.BatchSize;
         var retryCount = options.QueryRetryCount;
-        var connectionString = options.ConnectionString;
+
+        var connectionStringBuilder = new MySqlConnectionStringBuilder(options.ConnectionString)
+        {
+            AllowUserVariables = true,
+            UseAffectedRows = false
+        };
+
+        var connectionString = connectionStringBuilder.ConnectionString;
+
+
 
         if (true)
         {
