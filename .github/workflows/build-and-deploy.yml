@@ -111,45 +111,45 @@ jobs:
 
       #     echo "CONTAINER_REGISTRY_HOST=$env:CONTAINER_REGISTRY_HOST" >> $env:GITHUB_ENV;
 
-      # - name: Managed Identity
-      #   shell: pwsh
-      #   run: |
-      #     $env:IDENTITY_NAME = $env:SERVICE_NAME + "-identity";
-      #     $env:IDENTITY_PRINCIPAL_ID = az identity show -g $env:AZURE_GROUP_KUBERNETES -n $env:IDENTITY_NAME --query principalId -o tsv;
-      #     $env:KUBERNETES_ISSUER_URL = az aks list -g $env:AZURE_GROUP_KUBERNETES --query [0].['oidcIssuerProfile.issuerUrl'] -o tsv;
+      - name: Managed Identity
+        shell: pwsh
+        run: |
+          $env:IDENTITY_NAME = $env:SERVICE_NAME + "-identity";
+          $env:IDENTITY_PRINCIPAL_ID = az identity show -g $env:AZURE_GROUP_KUBERNETES -n $env:IDENTITY_NAME --query principalId -o tsv;
+          $env:KUBERNETES_ISSUER_URL = az aks list -g $env:AZURE_GROUP_KUBERNETES --query [0].['oidcIssuerProfile.issuerUrl'] -o tsv;
 
-      #     if (-not $env:IDENTITY_PRINCIPAL_ID)
-      #     {
-      #         az identity create `
-      #             -g $env:AZURE_GROUP_KUBERNETES `
-      #             -n $env:IDENTITY_NAME;
+          if (-not $env:IDENTITY_PRINCIPAL_ID)
+          {
+              az identity create `
+                  -g $env:AZURE_GROUP_KUBERNETES `
+                  -n $env:IDENTITY_NAME;
 
-      #         if ($LastExitCode -ne 0)
-      #         {
-      #             throw "error";
-      #         };
+              if ($LastExitCode -ne 0)
+              {
+                  throw "error";
+              };
 
-      #         $env:IDENTITY_PRINCIPAL_ID = az identity show -g $env:AZURE_GROUP_KUBERNETES -n $env:IDENTITY_NAME --query principalId -o tsv;
-      #     }
+              $env:IDENTITY_PRINCIPAL_ID = az identity show -g $env:AZURE_GROUP_KUBERNETES -n $env:IDENTITY_NAME --query principalId -o tsv;
+          }
           
-      #     $env:IDENTITY_CLIENT_ID = az identity show -g $env:AZURE_GROUP_KUBERNETES -n $env:IDENTITY_NAME --query clientId -o tsv;
+          $env:IDENTITY_CLIENT_ID = az identity show -g $env:AZURE_GROUP_KUBERNETES -n $env:IDENTITY_NAME --query clientId -o tsv;
 
-      #     az identity federated-credential create `
-      #         --name $env:SERVICE_NAME-credentials `
-      #         --resource-group $env:AZURE_GROUP_KUBERNETES `
-      #         --identity-name $env:IDENTITY_NAME `
-      #         --issuer $env:KUBERNETES_ISSUER_URL `
-      #         --subject "system:serviceaccount:${env:KUBERNETES_NAMESPACE}:${env:SERVICE_NAME}-service-account" `
-      #         --audience api://AzureADTokenExchange;
+          az identity federated-credential create `
+              --name $env:SERVICE_NAME-credentials `
+              --resource-group $env:AZURE_GROUP_KUBERNETES `
+              --identity-name $env:IDENTITY_NAME `
+              --issuer $env:KUBERNETES_ISSUER_URL `
+              --subject "system:serviceaccount:${env:KUBERNETES_NAMESPACE}:${env:SERVICE_NAME}-service-account" `
+              --audience api://AzureADTokenExchange;
 
-      #     if ($LastExitCode -ne 0)
-      #     {
-      #         throw "error";
-      #     };
+          if ($LastExitCode -ne 0)
+          {
+              throw "error";
+          };
           
-      #     echo "IDENTITY_NAME=$env:IDENTITY_NAME" >> $env:GITHUB_ENV;
-      #     echo "IDENTITY_CLIENT_ID=$env:IDENTITY_CLIENT_ID" >> $env:GITHUB_ENV; 
-      #     echo "IDENTITY_PRINCIPAL_ID=$env:IDENTITY_PRINCIPAL_ID" >> $env:GITHUB_ENV; 
+          echo "IDENTITY_NAME=$env:IDENTITY_NAME" >> $env:GITHUB_ENV;
+          echo "IDENTITY_CLIENT_ID=$env:IDENTITY_CLIENT_ID" >> $env:GITHUB_ENV; 
+          echo "IDENTITY_PRINCIPAL_ID=$env:IDENTITY_PRINCIPAL_ID" >> $env:GITHUB_ENV; 
 
       - name: MySQL Database Migration
         if: env.SQL_TYPE == 'mysql'
@@ -176,8 +176,6 @@ jobs:
           };
 
           $env:APP_USER_SQL_PATH = "app-database-user.sql";
-
-          az extension add --name rdbms-connect;
 
           $sql = @"
             CREATE AADUSER IF NOT EXISTS '$env:IDENTITY_NAME' IDENTIFIED BY '$env:IDENTITY_CLIENT_ID';
