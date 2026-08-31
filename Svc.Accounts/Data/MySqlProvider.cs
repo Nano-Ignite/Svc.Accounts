@@ -43,12 +43,12 @@ public sealed class MySqlProvider2 : IDataProvider
                 var dataSource = CreateEntraDataSource(options.ConnectionString);
 
                 healthChecksBuilder
-                    .AddMySql(_ => dataSource, "mysql", failureStatus: failureStatus);
+                    .AddMySql(_ => dataSource, name: "mysql", failureStatus: failureStatus);
             }
             //else
             //{
             //    healthChecksBuilder
-            //        .AddMySql(options.ConnectionString, "mysql", failureStatus: failureStatus);
+            //        .AddMySql(options.ConnectionString, name: "mysql", failureStatus: failureStatus);
             //}
         }
     }
