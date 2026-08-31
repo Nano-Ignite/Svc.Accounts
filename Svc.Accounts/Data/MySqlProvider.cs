@@ -52,36 +52,36 @@ public sealed class MySqlProvider2 : IDataProvider
         var connectionString = options.ConnectionString;
         var serverVersion = ServerVersion.AutoDetect(connectionString);
 
-        if (false)
+        if (true)
         {
-            //const string DEFAULT_URL = "https://ossrdbms-aad.database.windows.net/.default";
+            const string DEFAULT_URL = "https://ossrdbms-aad.database.windows.net/.default";
 
-            //var credential = new WorkloadIdentityCredential();
-            //var dataSourceBuilder = new MySqlDataSourceBuilder(connectionString);
+            var credential = new WorkloadIdentityCredential();
+            var dataSourceBuilder = new MySqlDataSourceBuilder(connectionString);
 
-            //dataSourceBuilder
-            //    .UsePeriodicPasswordProvider(
-            //        async (_, cancellationToken) =>
-            //        {
-            //            var request = new TokenRequestContext([DEFAULT_URL]);
+            dataSourceBuilder
+                .UsePeriodicPasswordProvider(
+                    async (_, cancellationToken) =>
+                    {
+                        var request = new TokenRequestContext([DEFAULT_URL]);
 
-            //            var token = await credential
-            //                .GetTokenAsync(request, cancellationToken);
+                        var token = await credential
+                            .GetTokenAsync(request, cancellationToken);
 
-            //            return token.Token;
-            //        }, TimeSpan.FromMinutes(50), TimeSpan.FromSeconds(10));
+                        return token.Token;
+                    }, TimeSpan.FromMinutes(50), TimeSpan.FromSeconds(10));
 
-            //var dataSource = dataSourceBuilder
-            //    .Build();
+            var dataSource = dataSourceBuilder
+                .Build();
 
-            //builder
-            //    .UseMySql(dataSource, serverVersion, ConfigureMySql);
-        }
-        else
-        {
             builder
-                .UseMySql(connectionString, serverVersion, ConfigureMySql);
+                .UseMySql(dataSource, serverVersion, ConfigureMySql);
         }
+        //else
+        //{
+        //    builder
+        //        .UseMySql(connectionString, serverVersion, ConfigureMySql);
+        //}
 
         void ConfigureMySql(MySqlDbContextOptionsBuilder mysqlBulder)
         {
