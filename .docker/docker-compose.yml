@@ -1,0 +1,31 @@
+services:
+  svc.accounts:
+    image: svc.accounts
+    hostname: svc-accounts
+    restart: on-failure
+    ports:
+      - 8080:8080
+    build:
+      context: ../Svc.Accounts
+      dockerfile: "Dockerfile.Local"
+    depends_on:
+      - database
+    networks:
+      - network
+    volumes:
+      - ./bin/svc-accounts:/mnt/svc-accounts
+
+  database:
+    image: mysql/mysql-server:latest
+    ports:
+      - 3306:3306
+    networks:
+      - network
+    environment:
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: myPassword_123
+
+networks:
+  network:
+    name: network
+    driver: bridge
