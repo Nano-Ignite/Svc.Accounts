@@ -177,6 +177,8 @@ jobs:
 
           $env:APP_USER_SQL_PATH = "app-database-user.sql";
 
+          az extension add --name rdbms-connect;
+
           $sql = @"
             CREATE AADUSER IF NOT EXISTS '$env:IDENTITY_NAME' IDENTIFIED BY '$env:IDENTITY_CLIENT_ID';
             GRANT SELECT, INSERT, UPDATE, DELETE ON $env:SQL_NAME.* TO '$env:IDENTITY_NAME'@'%';
