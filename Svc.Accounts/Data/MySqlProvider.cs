@@ -35,9 +35,21 @@ public sealed class MySqlProvider2 : IDataProvider
             var failureStatus = options.HealthCheck.UnhealthyStatus
                 .GetHealthStatus();
 
-            services
-                .AddHealthChecks()
-                .AddMySql(options.ConnectionString, name: "mysql", failureStatus: failureStatus);
+            var healthChecksBuilder = services
+                .AddHealthChecks();
+
+            if (true)
+            {
+                var dataSource = CreateEntraDataSource(options.ConnectionString);
+
+                healthChecksBuilder
+                    .AddMySql(_ => dataSource, "mysql", failureStatus: failureStatus);
+            }
+            //else
+            //{
+            //    healthChecksBuilder
+            //        .AddMySql(options.ConnectionString, "mysql", failureStatus: failureStatus);
+            //}
         }
     }
 
@@ -58,29 +70,9 @@ public sealed class MySqlProvider2 : IDataProvider
 
         var connectionString = connectionStringBuilder.ConnectionString;
 
-
-
         if (true)
         {
-            const string DEFAULT_URL = "https://ossrdbms-aad.database.windows.net/.default";
-
-            var credential = new WorkloadIdentityCredential();
-            var dataSourceBuilder = new MySqlDataSourceBuilder(connectionString);
-
-            dataSourceBuilder
-                .UsePeriodicPasswordProvider(
-                    async (_, cancellationToken) =>
-                    {
-                        var request = new TokenRequestContext([DEFAULT_URL]);
-
-                        var token = await credential
-                            .GetTokenAsync(request, cancellationToken);
-
-                        return token.Token;
-                    }, TimeSpan.FromMinutes(50), TimeSpan.FromSeconds(10));
-
-            var dataSource = dataSourceBuilder
-                .Build();
+            var dataSource = CreateEntraDataSource(connectionString);
 
             using var connection = dataSource.CreateConnection();
 
@@ -112,5 +104,31 @@ public sealed class MySqlProvider2 : IDataProvider
                 .UseNetTopologySuite()
                 .UseQuerySplittingBehavior(querySplittingBehavior);
         }
+    }
+
+
+    private static MySqlDataSource CreateEntraDataSource(string connectionString)
+    {
+        ArgumentNullException.ThrowIfNull(connectionString);
+
+        const string DEFAULT_URL = "https://ossrdbms-aad.database.windows.net/.default";
+
+        var credential = new WorkloadIdentityCredential();
+        var dataSourceBuilder = new MySqlDataSourceBuilder(connectionString);
+
+        dataSourceBuilder
+            .UsePeriodicPasswordProvider(
+                async (_, cancellationToken) =>
+                {
+                    var request = new TokenRequestContext([DEFAULT_URL]);
+
+                    var token = await credential
+                        .GetTokenAsync(request, cancellationToken);
+
+                    return token.Token;
+                }, TimeSpan.FromMinutes(50), TimeSpan.FromSeconds(10));
+
+        return dataSourceBuilder
+            .Build();
     }
 }
