@@ -50,7 +50,6 @@ public sealed class MySqlProvider2 : IDataProvider
         var batchSize = options.BatchSize;
         var retryCount = options.QueryRetryCount;
         var connectionString = options.ConnectionString;
-        var serverVersion = ServerVersion.AutoDetect(connectionString);
 
         if (true)
         {
@@ -74,11 +73,21 @@ public sealed class MySqlProvider2 : IDataProvider
             var dataSource = dataSourceBuilder
                 .Build();
 
+            using var connection = dataSource.CreateConnection();
+
+            connection.Open();
+
+            var serverVersion = ServerVersion.Parse(connection.ServerVersion);
+
+            connection.Close();
+
             builder
                 .UseMySql(dataSource, serverVersion, ConfigureMySql);
         }
         //else
         //{
+        //    var serverVersion = ServerVersion.AutoDetect(connectionString);
+
         //    builder
         //        .UseMySql(connectionString, serverVersion, ConfigureMySql);
         //}
