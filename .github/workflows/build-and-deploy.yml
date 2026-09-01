@@ -300,6 +300,9 @@ jobs:
 
               $env:MAINTENANCE_CONFIG_ID = az maintenance public-configuration list --query "[?name=='SQL_Default'].id" -o tsv;
 
+              az extension list --query "[].name" -o tsv;
+              echo "MAINTENANCE_CONFIG_ID=[$env:MAINTENANCE_CONFIG_ID]";
+
               az sql db update `
                   -n $env:SQL_NAME `
                   -s $env:SQL_SERVER_NAME `
