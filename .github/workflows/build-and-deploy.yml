@@ -37,10 +37,6 @@ env:
   KUBERNETES_CPU_LIMIT: 450m
   KUBERNETES_CPU_SCALING: 180
   SQL_TYPE: sqlserver
-  SQL_SERVICE_OBJECTIVE: GP_Gen5_2
-  SQL_EDITION: GeneralPurpose
-  SQL_MAX_SIZE: 64GB
-  SQL_BACKUP_RETENTION: 35
   SQL_AUTH_TYPE: Azure
   SQL_NAME: accountsDb
   AUTH_JWT_PUBLIC_KEY: ${{ github.ref == 'refs/heads/main' && secrets.PRODUCTION_AUTH_JWT_PUBLIC_KEY || secrets.STAGING_AUTH_JWT_PUBLIC_KEY }}
@@ -283,6 +279,10 @@ jobs:
         if: env.SQL_TYPE == 'sqlserver'
         shell: pwsh
         run: |
+          $env:SQL_SERVICE_OBJECTIVE = "GP_Gen5_2";
+          $env:SQL_EDITION = "GeneralPurpose";
+          $env:SQL_MAX_SIZE = "64GB";
+          $env:SQL_BACKUP_RETENTION = "35"
           $env:SQL_SERVER_NAME = az sql server list -g $env:AZURE_GROUP_DATABASE --query "[0].name" -o tsv;
           $env:SQL_DB_EXISTS = az sql db show -g $env:AZURE_GROUP_DATABASE -s $env:SQL_SERVER_NAME -n $env:SQL_NAME --query name -o tsv 2>$null;
 
@@ -297,11 +297,9 @@ jobs:
                   --max-size $env:SQL_MAX_SIZE `
                   --backup-storage-redundancy Geo `
                   --zone-redundant true;
-
-              $env:MAINTENANCE_CONFIG_ID = az maintenance public-configuration list --query "[?name=='SQL_Default'].id" -o tsv;
-
-              az extension list --query "[].name" -o tsv;
-              echo "MAINTENANCE_CONFIG_ID=[$env:MAINTENANCE_CONFIG_ID]";
+                  
+              $env:MAINTENANCE_CONFIG_ID = "/subscriptions/$env:AZURE_SUBSCRIPTION_ID/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default";
+              #$env:MAINTENANCE_CONFIG_ID = az maintenance public-configuration list --query "[?name=='SQL_Default'].id" -o tsv;
 
               az sql db update `
                   -n $env:SQL_NAME `
