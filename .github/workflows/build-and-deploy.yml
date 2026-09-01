@@ -317,7 +317,7 @@ jobs:
                 { "category": "QueryStoreRuntimeStatistics", "enabled": true },
                 { "category": "SQLSecurityAuditEvents", "enabled": true }
               ]
-              "@;
+          "@;
 
               $logsJson | Set-Content $env:SQL_LOGS_PATH;
 
@@ -327,7 +327,7 @@ jobs:
                 { "category": "InstanceAndAppAdvanced", "enabled": true },
                 { "category": "WorkloadManagement", "enabled": true }
               ]
-              "@;
+          "@;
 
               $metricsJson | Set-Content $env:SQL_METRICS_PATH;
 
@@ -377,12 +377,12 @@ jobs:
                   --name "High Storage IO" `
                   --resource-group $env:AZURE_GROUP_DATABASE `
                   --scopes $env:SQLDB_ID `
-                  --condition "avg io_consumption_percent > 80" `
+                  --condition "avg physical_data_read_percent > 80" `
                   --window-size PT5M `
                   --evaluation-frequency PT1M `
                   --action $env:ACTION_GROUP `
                   --severity 2 `
-                  --description "Alert when Storage IO consumption is above 80% for 5 minutes.";
+                  --description "Alert when data IO usage is above 80% for 5 minutes.";
 
               az monitor metrics alert create `
                   --name "High Storage Percent" `
