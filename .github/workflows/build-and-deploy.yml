@@ -298,7 +298,7 @@ jobs:
                   --backup-storage-redundancy Geo `
                   --zone-redundant true;
 
-              $env:MAINTENANCE_CONFIG_ID = az maintenance public-configuration list --query "[?name=='SQL_Default_1'].id" -o tsv;
+              $env:MAINTENANCE_CONFIG_ID = az maintenance public-configuration list --query "[?name=='SQL_Default'].id" -o tsv;
 
               az sql db update `
                   -n $env:SQL_NAME `
