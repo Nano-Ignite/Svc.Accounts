@@ -456,13 +456,11 @@ jobs:
 
           $sql | Set-Content $env:APP_USER_SQL_PATH;
 
-          sqlcmd `
-              -S $env:SQL_HOST `
-              -d $env:SQL_NAME `
-              -G `
-              -U $env:AZURE_CLIENT_ID `
-              -P $env:AZURE_CLIENT_SECRET `
-              -i $env:APP_USER_SQL_PATH;
+          Invoke-Sqlcmd `
+              -ServerInstance $env:SQL_HOST `
+              -Database $env:SQL_NAME `
+              -AccessToken $env:SQL_TOKEN `
+              -InputFile $env:APP_USER_SQL_PATH;
 
           if ($LastExitCode -ne 0)
           {
