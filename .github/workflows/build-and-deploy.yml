@@ -459,7 +459,7 @@ jobs:
           sqlcmd `
               -S $env:SQL_HOST `
               -d $env:SQL_NAME `
-              --authentication-method ActiveDirectoryServicePrincipal `
+              -G `
               -U $env:AZURE_CLIENT_ID `
               -P $env:AZURE_CLIENT_SECRET `
               -i $env:APP_USER_SQL_PATH;
