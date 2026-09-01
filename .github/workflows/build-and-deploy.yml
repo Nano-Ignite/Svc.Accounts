@@ -469,7 +469,7 @@ jobs:
               throw "error";
           };
 
-          $env:SQL_CONNECTIONSTRING = "Server=$env:SQL_HOST,$env:SQL_PORT;Database=$env:SQL_NAME;User Id=$env:IDENTITY_NAME;Encrypt=True;TrustServerCertificate=True;";
+          $env:SQL_CONNECTIONSTRING = "Server=$env:SQL_HOST,$env:SQL_PORT;Database=$env:SQL_NAME;User Id=$env:IDENTITY_CLIENT_ID;Encrypt=True;TrustServerCertificate=True;";
           echo "SQL_CONNECTIONSTRING=$env:SQL_CONNECTIONSTRING" >> $env:GITHUB_ENV;
 
       - name: Kubernetes Deploy
