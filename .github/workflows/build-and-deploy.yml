@@ -18,6 +18,7 @@ env:
   AZURE_GROUP_KUBERNETES: ${{ vars.AZURE_RESOURCE_GROUP_KUBERNETES }}
   AZURE_GROUP_DELIVERY: ${{ vars.AZURE_RESOURCE_GROUP_DELIVERY }}
   AZURE_GROUP_DATABASE : ${{ vars.AZURE_RESOURCE_GROUP_DATABASE }}
+  AZURE_GROUP_LOGS : ${{ vars.AZURE_RESOURCE_GROUP_LOGS }}
   AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
   AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
@@ -330,7 +331,7 @@ jobs:
                   --description "Alert when CPU usage is above 80% for 5 minutes.";
 
               az monitor metrics alert create `
-                  --name "High Memory/Worker Usage" `
+                  --name "High Memory And Worker Usage" `
                   --resource-group $env:AZURE_GROUP_DATABASE `
                   --scopes $env:SQLDB_ID `
                   --condition "avg workers_percent > 80" `
