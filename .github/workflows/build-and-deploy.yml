@@ -307,15 +307,36 @@ jobs:
                   --maint-config-id $env:MAINTENANCE_CONFIG_ID;
 
               $env:DIAGNOSTIC_SETTINGS_NAME = "diagnostics-" + $env:SQL_NAME;
+              $env:SQL_LOGS_PATH = "sql-diagnostic-logs.json";
+              $env:SQL_METRICS_PATH = "sql-diagnostic-metrics.json";
               $env:WORKSPACE_ID = az monitor log-analytics workspace list -g $env:AZURE_GROUP_LOGS --query [0].[id] -o tsv;
               $env:SQLDB_ID = az sql db show -g $env:AZURE_GROUP_DATABASE -s $env:SQL_SERVER_NAME -n $env:SQL_NAME --query id -o tsv;
+
+              $logsJson = @"
+              [
+                { "category": "QueryStoreRuntimeStatistics", "enabled": true },
+                { "category": "SQLSecurityAuditEvents", "enabled": true }
+              ]
+              "@;
+
+              $logsJson | Set-Content $env:SQL_LOGS_PATH;
+
+              $metricsJson = @"
+              [
+                { "category": "Basic", "enabled": true },
+                { "category": "InstanceAndAppAdvanced", "enabled": true },
+                { "category": "WorkloadManagement", "enabled": true }
+              ]
+              "@;
+
+              $metricsJson | Set-Content $env:SQL_METRICS_PATH;
 
               az monitor diagnostic-settings create `
                   --name $env:DIAGNOSTIC_SETTINGS_NAME `
                   --resource $env:SQLDB_ID `
                   --workspace $env:WORKSPACE_ID `
-                  --logs '@.azure/.diagnostic-settings/logs.json' `
-                  --metrics '@.azure/.diagnostic-settings/metrics.json';
+                  --logs "@$env:SQL_LOGS_PATH" `
+                  --metrics "@$env:SQL_METRICS_PATH";
 
               $env:ACTION_GROUP = az monitor action-group list -g $env:AZURE_GROUP_LOGS --query [0].[id] -o tsv;
 
