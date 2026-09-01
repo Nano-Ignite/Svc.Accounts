@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -12,22 +11,19 @@ namespace Svc.Accounts.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterDatabase()
-                .Annotation("Npgsql:PostgresExtension:postgis", ",,");
-
             migrationBuilder.CreateTable(
                 name: "__EFAudit",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedBy = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    EntityKey = table.Column<Guid>(type: "uuid", nullable: false),
-                    EntitySetName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    EntityTypeName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    EntityState = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
-                    RequestId = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    EntityKey = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EntitySetName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EntityTypeName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    EntityState = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    RequestId = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     IsDeleted = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -38,10 +34,10 @@ namespace Svc.Accounts.Migrations
                 name: "__EFDataProtectionKeys",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    FriendlyName = table.Column<string>(type: "text", nullable: true),
-                    Xml = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FriendlyName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Xml = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -52,10 +48,10 @@ namespace Svc.Accounts.Migrations
                 name: "__EFIdentityRole",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -66,22 +62,22 @@ namespace Svc.Accounts.Migrations
                 name: "__EFIdentityUser",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
-                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    PasswordHash = table.Column<string>(type: "text", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "text", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -92,13 +88,13 @@ namespace Svc.Accounts.Migrations
                 name: "Country",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    NameNormalized = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    Code = table.Column<string>(type: "character varying(5)", maxLength: 5, nullable: false),
-                    PhonePrefix = table.Column<string>(type: "character varying(5)", maxLength: 5, nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    NameNormalized = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
+                    PhonePrefix = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
                     IsDeleted = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -109,11 +105,11 @@ namespace Svc.Accounts.Migrations
                 name: "Tenant",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    NameNormalized = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    NameNormalized = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     IsDeleted = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -124,14 +120,14 @@ namespace Svc.Accounts.Migrations
                 name: "__EFAuditProperties",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ParentId = table.Column<Guid>(type: "uuid", nullable: false),
-                    PropertyName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    RelationName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NewValue = table.Column<string>(type: "text", nullable: true),
-                    OldValue = table.Column<string>(type: "text", nullable: true),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PropertyName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    RelationName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NewValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OldValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -148,11 +144,11 @@ namespace Svc.Accounts.Migrations
                 name: "__EFIdentityRoleClaim",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    RoleId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ClaimType = table.Column<string>(type: "text", nullable: true),
-                    ClaimValue = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -169,12 +165,12 @@ namespace Svc.Accounts.Migrations
                 name: "__EFIdentityApiKey",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    IdentityUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    Hash = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    RevokedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdentityUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Hash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    RevokedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -191,10 +187,10 @@ namespace Svc.Accounts.Migrations
                 name: "__EFIdentityUserChangeData",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    IdentityUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    NewEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NewPhoneNumber = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdentityUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    NewEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NewPhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -211,11 +207,11 @@ namespace Svc.Accounts.Migrations
                 name: "__EFIdentityUserClaim",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ClaimType = table.Column<string>(type: "text", nullable: true),
-                    ClaimValue = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -232,10 +228,10 @@ namespace Svc.Accounts.Migrations
                 name: "__EFIdentityUserLogin",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    ProviderKey = table.Column<string>(type: "text", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -252,11 +248,11 @@ namespace Svc.Accounts.Migrations
                 name: "__EFIdentityUserRefreshToken",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    IdentityUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    AppId = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    Value = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    ExpireAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdentityUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AppId = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    ExpireAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -273,8 +269,8 @@ namespace Svc.Accounts.Migrations
                 name: "__EFIdentityUserRole",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uuid", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -297,10 +293,10 @@ namespace Svc.Accounts.Migrations
                 name: "__EFIdentityUserToken",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Value = table.Column<string>(type: "text", nullable: true)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -317,16 +313,16 @@ namespace Svc.Accounts.Migrations
                 name: "Address",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CountryId = table.Column<Guid>(type: "uuid", nullable: false),
-                    City_Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    City_NameNormalized = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    City_ZipCode = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
-                    StreetName = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: false),
-                    StreetNameNormalized = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: false),
-                    HouseNumber = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    City_Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    City_NameNormalized = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    City_ZipCode = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
+                    StreetName = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
+                    StreetNameNormalized = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
+                    HouseNumber = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
                     IsDeleted = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -343,10 +339,10 @@ namespace Svc.Accounts.Migrations
                 name: "__EFIdentityApiKeyClaim",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ApiKeyId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ClaimType = table.Column<string>(type: "text", nullable: false),
-                    ClaimValue = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ApiKeyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -363,9 +359,9 @@ namespace Svc.Accounts.Migrations
                 name: "__EFIdentityApiKeyRole",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ApiKeyId = table.Column<Guid>(type: "uuid", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ApiKeyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -388,19 +384,19 @@ namespace Svc.Accounts.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    TenantId = table.Column<Guid>(type: "uuid", nullable: false),
-                    FirstName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    LastName = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    FullName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    FullNameNormalized = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    AddressId = table.Column<Guid>(type: "uuid", nullable: true),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    FullNameNormalized = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    AddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
-                    Gender = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
-                    Language = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
-                    UserPictureExtension = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
+                    Gender = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    Language = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    UserPictureExtension = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: true),
                     IsDeleted = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -490,7 +486,8 @@ namespace Svc.Accounts.Migrations
                 name: "RoleNameIndex",
                 table: "__EFIdentityRole",
                 column: "NormalizedName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX___EFIdentityRoleClaim_RoleId",
@@ -506,7 +503,8 @@ namespace Svc.Accounts.Migrations
                 name: "IX___EFIdentityUser_Email",
                 table: "__EFIdentityUser",
                 column: "Email",
-                unique: true);
+                unique: true,
+                filter: "[Email] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX___EFIdentityUser_IsActive",
@@ -522,7 +520,8 @@ namespace Svc.Accounts.Migrations
                 name: "UserNameIndex",
                 table: "__EFIdentityUser",
                 column: "NormalizedUserName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "UX___EFIdentityUserChangeData_IdentityUserId",
@@ -657,7 +656,8 @@ namespace Svc.Accounts.Migrations
                 name: "UX_User_AddressId",
                 table: "User",
                 column: "AddressId",
-                unique: true);
+                unique: true,
+                filter: "[AddressId] IS NOT NULL");
         }
 
         /// <inheritdoc />

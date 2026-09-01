@@ -2,6 +2,7 @@
 using Nano.Data.Extensions;
 using Nano.Data.MySql;
 using Nano.Data.PostgreSQL;
+using Nano.Data.SqlServer;
 using Nano.Eventing.Extensions;
 using Nano.Eventing.RabbitMq;
 using Nano.Logging.Extensions;
@@ -15,7 +16,7 @@ NanoApiApplication
     .ConfigureServices(x =>
     {
         x.AddNanoLogging<SerilogProvider>();
-        x.AddNanoData<PostgresSqlProvider, AccountsDbContext>();
+        x.AddNanoData<SqlServerProvider, AccountsDbContext>();
     })
     .Build()
     .Run();
