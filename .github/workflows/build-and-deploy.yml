@@ -77,39 +77,39 @@ jobs:
               throw "error";
           };
 
-      # - name: Test Solution
-      #   shell: pwsh
-      #   run: |
-      #     dotnet test .\.tests\Tests.$env:APP_NAME\Tests.$env:APP_NAME.csproj;
+      - name: Test Solution
+        shell: pwsh
+        run: |
+          dotnet test .\.tests\Tests.$env:APP_NAME\Tests.$env:APP_NAME.csproj;
 
-      #     if ($LastExitCode -ne 0)
-      #     { 
-      #       throw "error";
-      #     };
+          if ($LastExitCode -ne 0)
+          { 
+            throw "error";
+          };
 
-      # - name: Build & Push Image
-      #   shell: pwsh
-      #   run: |
-      #     $env:CONTAINER_REGISTRY_HOST = az acr list -g $env:AZURE_GROUP_DELIVERY --query [0].loginServer -o tsv;
+      - name: Build & Push Image
+        shell: pwsh
+        run: |
+          $env:CONTAINER_REGISTRY_HOST = az acr list -g $env:AZURE_GROUP_DELIVERY --query [0].loginServer -o tsv;
 
-      #     az acr build `
-      #         --registry $env:CONTAINER_REGISTRY_HOST `
-      #         -t "$($env:IMAGE_NAME):latest" `
-      #         -t "$($env:IMAGE_NAME):$($env:VERSION)" `
-      #         --build-arg DOTNET_SDK_VERSION=$env:DOTNET_SDK_VERSION `
-      #         --build-arg DOTNET_ASPNET_VERSION=$env:DOTNET_ASPNET_VERSION `
-      #         --build-arg CONTAINER_REGISTRY_SOURCE_LABEL=https://github.com/$env:GITHUB_REPOSITORY `
-      #         --build-arg NUGET_HOST=$env:NUGET_HOST `
-      #         --build-arg NUGET_USERNAME=$env:NUGET_USERNAME `
-      #         --build-arg NUGET_PASSWORD=$env:NUGET_PASSWORD `
-      #         ./
+          az acr build `
+              --registry $env:CONTAINER_REGISTRY_HOST `
+              -t "$($env:IMAGE_NAME):latest" `
+              -t "$($env:IMAGE_NAME):$($env:VERSION)" `
+              --build-arg DOTNET_SDK_VERSION=$env:DOTNET_SDK_VERSION `
+              --build-arg DOTNET_ASPNET_VERSION=$env:DOTNET_ASPNET_VERSION `
+              --build-arg CONTAINER_REGISTRY_SOURCE_LABEL=https://github.com/$env:GITHUB_REPOSITORY `
+              --build-arg NUGET_HOST=$env:NUGET_HOST `
+              --build-arg NUGET_USERNAME=$env:NUGET_USERNAME `
+              --build-arg NUGET_PASSWORD=$env:NUGET_PASSWORD `
+              ./
 
-      #     if ($LastExitCode -ne 0) 
-      #     { 
-      #         throw "error";
-      #     };  
+          if ($LastExitCode -ne 0) 
+          { 
+              throw "error";
+          };  
 
-      #     echo "CONTAINER_REGISTRY_HOST=$env:CONTAINER_REGISTRY_HOST" >> $env:GITHUB_ENV;
+          echo "CONTAINER_REGISTRY_HOST=$env:CONTAINER_REGISTRY_HOST" >> $env:GITHUB_ENV;
 
       - name: Managed Identity
         shell: pwsh
