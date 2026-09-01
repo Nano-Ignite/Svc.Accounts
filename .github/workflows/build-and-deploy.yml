@@ -66,17 +66,17 @@ jobs:
           $env:KUBERNETES_CLUSTER = az aks list -g $env:AZURE_GROUP_KUBERNETES --query [0].name -o tsv;
           az aks get-credentials -g $env:AZURE_GROUP_KUBERNETES -n $env:KUBERNETES_CLUSTER --overwrite -o none;
 
-      # - name: Build Solution
-      #   shell: pwsh
-      #   run: |
-      #     dotnet nuget add source $env:NUGET_HOST -n private -u $env:NUGET_USERNAME -p $env:NUGET_PASSWORD --store-password-in-clear-text;
+      - name: Build Solution
+        shell: pwsh
+        run: |
+          dotnet nuget add source $env:NUGET_HOST -n private -u $env:NUGET_USERNAME -p $env:NUGET_PASSWORD --store-password-in-clear-text;
 
-      #     dotnet build -c Release .\$env:APP_NAME.sln;
+          dotnet build -c Release .\$env:APP_NAME.sln;
 
-      #     if ($LastExitCode -ne 0)
-      #     { 
-      #         throw "error";
-      #     };
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
 
       # - name: Test Solution
       #   shell: pwsh
@@ -299,7 +299,6 @@ jobs:
                   --zone-redundant true;
                   
               $env:MAINTENANCE_CONFIG_ID = "/subscriptions/$env:AZURE_SUBSCRIPTION_ID/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default";
-              #$env:MAINTENANCE_CONFIG_ID = az maintenance public-configuration list --query "[?name=='SQL_Default'].id" -o tsv;
 
               az sql db update `
                   -n $env:SQL_NAME `
@@ -459,13 +458,13 @@ jobs:
 
           $sql | Set-Content $env:APP_USER_SQL_PATH;
 
-          Install-Module -Name SqlServer -Scope CurrentUser;
-
-          Invoke-Sqlcmd `
-              -ServerInstance $env:SQL_HOST `
-              -Database $env:SQL_NAME `
-              -AccessToken $env:SQL_TOKEN `
-              -InputFile $env:APP_USER_SQL_PATH;
+          sqlcmd `
+              -S $env:SQL_HOST `
+              -d $env:SQL_NAME `
+              --authentication-method ActiveDirectoryServicePrincipal `
+              -U $env:AZURE_CLIENT_ID `
+              -P $env:AZURE_CLIENT_SECRET `
+              -i $env:APP_USER_SQL_PATH;
 
           if ($LastExitCode -ne 0)
           {
