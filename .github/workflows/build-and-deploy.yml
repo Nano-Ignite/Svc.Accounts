@@ -430,8 +430,6 @@ jobs:
           };
 
           $env:APP_USER_SQL_PATH = "app-database-user.sql";
-          $env:SQL_USER = az sql server ad-admin list -g $env:AZURE_GROUP_DATABASE -s $env:SQL_SERVER --query "[0].login" -o tsv;
-          $env:SQL_TOKEN = az account get-access-token --resource "https://database.windows.net/" --query accessToken -o tsv;
 
           $sql = @"
             IF NOT EXISTS (SELECT 1 FROM sys.database_principals WHERE name = '$env:IDENTITY_NAME')
@@ -457,6 +455,8 @@ jobs:
           "@;
 
           $sql | Set-Content $env:APP_USER_SQL_PATH;
+
+          $env:SQL_TOKEN = az account get-access-token --resource "https://database.windows.net/" --query accessToken -o tsv;
 
           Invoke-Sqlcmd `
               -ServerInstance $env:SQL_HOST `
